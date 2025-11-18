@@ -24,6 +24,9 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
   --gap-sm:    clamp(8px, 2vw, 12px);
   --gap-md:    clamp(12px, 3vw, 20px);
   --gap-lg:    clamp(20px, 4vw, 32px);
+  --gap-newsm: clamp(250px, 5vw, 250px); 
+  --gap-newmd: clamp(250px, 6vw, 250px);
+  --gap-newlg: clamp(250px, 8vw, 250px); 
   --pad-sm:    clamp(12px, 3vw, 20px);
   --pad-md:    clamp(16px, 4vw, 24px);
   --pad-lg:    clamp(20px, 5vw, 32px);
@@ -177,6 +180,25 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
   backdrop-filter: blur(10px);
 }
 
+.panel-toggleT{
+  position:fixed;
+  bottom: var(--gap-newlg);
+  background:rgba(233,69,96,.7) !important; 
+  border:1px solid rgba(233,69,96,.8) !important;
+  color:#fff !important; 
+  padding: 12px 20px !important;
+  border-radius:var(--radius-md);
+  font-size:var(--font-sm) !important; 
+  font-weight:600; 
+  cursor:pointer; 
+  z-index:100;
+  transition:all 0.3s ease;
+  font-family:'Poppins',sans-serif !important;
+  box-shadow: 0 4px 20px rgba(233,69,96,.4) !important;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+}
+
 .panel-toggle:hover{
   background:rgba(233,69,96,.9) !important; 
   box-shadow:0 6px 25px rgba(233,69,96,.6) !important;
@@ -188,6 +210,13 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
 }
 
 #showPlaylistBtnRight{
+  right: var(--gap-lg);
+}
+
+#FindMe{
+  left: var(--gap-lg);
+}
+#testing{
   right: var(--gap-lg);
 }
 
@@ -474,6 +503,10 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
     padding: 10px 16px !important;
     font-size: 0.85rem !important;
   }
+    .panel-toggleT{
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+  }
   
   #showQueueBtn {
     left: var(--gap-md);
@@ -482,6 +515,14 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
   #showPlaylistBtnRight {
     right: var(--gap-md);
   }
+
+  #FindMe{
+    left: var(--gap-new);
+  }
+  #testing{
+    right: var(--gap-md);
+  }
+
 }
 
 /* Mobile */
@@ -491,7 +532,11 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
     font-size: 0.8rem !important;
     top: var(--gap-md);
   }
-  
+  .panel-toggleT {
+    padding: 8px 14px !important;
+    font-size: 0.8rem !important;
+    bottom: var(--gap-newmd);
+  }
   #showQueueBtn {
     left: var(--gap-sm);
   }
@@ -499,6 +544,14 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
   #showPlaylistBtnRight {
     right: var(--gap-sm);
   }
+
+  #FindMe{
+    left: var(--gap-newsm);
+  }
+  #testing{
+    right: var(--gap-newsm);
+  }
+
   
   #top-bar {
     flex-direction: column;
@@ -532,13 +585,17 @@ html, body { height:100%; font-family:'Inter',sans-serif; background:#0f0f1a; co
     padding: 6px 12px !important;
     font-size: 0.75rem !important;
   }
+  .panel-toggleT {
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+  }
   
   #floating-player {
     width: 95vw;
     padding: var(--pad-sm);
     bottom: var(--gap-sm);
   }
-  
+
   .modal {
     width: 98vw;
     max-height: 90vh;

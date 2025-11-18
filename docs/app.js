@@ -8,7 +8,10 @@ let userData = null;
 let songQueue = [];
 let playlists = {};
 let currentSong = null;
-let songIndex = 0;
+let songIndex = -1;
+let history = [];
+let ManualQueue = 0;
+let Pins = {};
 
 // ------------------
 // FETCH USER DATA
@@ -21,6 +24,8 @@ fetch(`/api/getUser/${pubUsername}`)
       songQueue = userData.queue || [];
       songIndex = userData.queueIndex || 0;
       playlists = userData.playlists || {};
+      history = userData.history || [];
+      ManualQueue = userData.manualQueue || 0;
       console.log("User loaded:", userData);
     } else {
       console.warn("User load failed:", data.message);
@@ -47,6 +52,8 @@ const timeLabel = document.getElementById("timeLabel");
 const playlistDropdown = document.querySelector("#top-bar .dropdown");
 const playlistOpt = document.getElementById("playlistOpt");
 const notification = document.getElementById("notification");
+const FindMe = document.getElementById("FindMe");
+const testingBtn = document.getElementById("testing");
 
 // Modal elements
 const queueModal = document.getElementById("queueModal");
@@ -104,9 +111,24 @@ function formatTime(seconds) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+function distanceMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // Earth radius in meters
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) ** 2;
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+
 function updateTimeLabel() {
   timeLabel.textContent = `${formatTime(audioPlayer.currentTime)} / ${formatTime(audioPlayer.duration)}`;
 }
+
 
 function showTemporaryNotification(text, ms = 1400) {
   notification.textContent = text;
@@ -165,6 +187,22 @@ async function saveQueue() {
     });
 
     songQueue = mergedQueue; // update local queue
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function saveHistory() {
+
+}
+
+async function saveManualQueue() {
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { manualQueue: ManualQueue } })
+    });
   } catch (err) {
     console.error(err);
   }
@@ -447,6 +485,52 @@ window.onclick = () => {
 // ------------------
 // MAP & PINS
 // ------------------
+let lastAutoQueued = null;
+let lastAutoQueueTime = 0;
+let autoQueuedPins = new Set();
+
+function autoQueueSong() {
+  navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude, longitude } = pos.coords;
+      const now = Date.now();
+      const pinsToQueue = [];
+
+      for (const key in Pins) {
+          const pin = Pins[key];
+          const [lat, lng] = key.split(',').map(Number);
+          const dist = distanceMeters(lat, lng, latitude, longitude);
+
+          if (dist < 100) {
+              const timeSince = now - pin.lastQueuedAt;
+
+              // If cooldown passed → ready to queue again
+              if (timeSince >= 5 * 60 * 1000) {
+                  pinsToQueue.push(pin);
+              }
+          }
+      }
+
+      pinsToQueue.forEach(pin => {
+          pin.lastQueuedAt = now; // update per-pin cooldown
+          queueSong(pin.audio_url, pin.song, pin.artist);
+          showTemporaryNotification(`"${pin.song}" auto-queued`);
+      });
+
+  }, console.error, { enableHighAccuracy: true });
+}
+
+
+
+function centerMapOnUser() {
+      if (userMarker) {
+          map.setView(userMarker.getLatLng(), 15);
+          // Set autocenter back to true if you want it to follow again until the next user move
+          // autoCenterView = true; 
+      } else {
+          alert("Your location is not yet available.");
+      }
+  }
+  
 let map, userMarker;
 let autoCenterView = true; 
 
@@ -474,7 +558,8 @@ document.addEventListener("DOMContentLoaded", () => {
           weight: 2,
           fillOpacity: 1
         }).addTo(map);
-
+        FindMe.onclick = centerMapOnUser;
+        testingBtn.textContent = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
         map.setView([latitude, longitude], 15);
 
       } else {
@@ -484,6 +569,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (autoCenterView) {
         map.setView([latitude, longitude], 15);
       }
+      autoQueueSong();
+
     }, console.error, { enableHighAccuracy: true });
   }
 
@@ -507,6 +594,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     pins.forEach(pin => {
+      Pins[`${pin.lat},${pin.lng}`] = {
+        audio_url: pin.audio_url,
+        song: pin.song,
+        artist: pin.artist
+      };
       const marker = L.marker([pin.lat, pin.lng], { icon: redIcon }).addTo(map);
       marker.bindPopup(`
         <div class="popup-content">
@@ -524,6 +616,10 @@ document.addEventListener("DOMContentLoaded", () => {
           e.popup.close();
         };
         popup.querySelector(".popup-queue-btn").onclick = () => {
+          ManualQueue++;
+
+          saveManualQueue();
+
           queueSong(pin.audio_url, pin.song, pin.artist);
           showTemporaryNotification(`"${pin.song}" queued`);
           e.popup.close();

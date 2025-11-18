@@ -49,7 +49,9 @@ app.post("/api/register", (req, res) => {
     password,
     playlists: {},
     queue: [],
-    queueIndex: 0
+    queueIndex: -1,
+    manualQueue: 0,
+    history: []
   };
 
   saveUsers(users);
@@ -105,6 +107,11 @@ app.post("/api/updateUser", (req, res) => {
   // Merge queueIndex
   if (updates.queueIndex !== undefined) {
     users[username].queueIndex = updates.queueIndex;
+  }
+
+  // Merge queueIndex
+  if (updates.manualQueue !== undefined) {
+    users[username].manualQueue = updates.manualQueue;
   }
 
   saveUsers(users);
