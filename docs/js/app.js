@@ -85,8 +85,13 @@ export function playSong(url, title, artist) {
   populateQueueUI();
 }
 
-export function queueSong(url, title, artist) {
-  state.songQueue.push({ url, title, artist });
+export function queueSong(url, title, artist, auto) {
+
+  if (auto) {
+    state.songQueue.push({ url, title, artist });
+  } else {
+    state.songQueue.splice(state.ManualQueue-1, 0, { url, title, artist })
+  }
   populateQueueUI(); // Refresh the queue modal
   showTemporaryNotification(`"${title}" queued`);
   saveQueue();  
@@ -170,6 +175,8 @@ initMap({
     onPlay: playSong,
     onQueue: (url, title, artist, auto) => {
         if (!auto) state.ManualQueue++;
-        queueSong(url, title, artist);
-    }
+        saveManualQueue()
+        queueSong(url, title, artist, auto);
+    },
+    socket
 });

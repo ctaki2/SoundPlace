@@ -8,7 +8,7 @@ let map, userMarker;
 let autoCenterView = true;
 export const Pins = {};
 
-export function initMap({ onPlay, onQueue }) {
+export function initMap({ onPlay, onQueue, socket }) {
     map = L.map("map").setView([41.8781, -87.6298], 13);
 
     L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
@@ -20,21 +20,18 @@ export function initMap({ onPlay, onQueue }) {
     map.on("movestart", () => {
         autoCenterView = false;
     });
+
     const FindMe = document.getElementById("FindMe");
-    FindMe.onclick = centerMapOnUser;
+    if (FindMe) FindMe.onclick = centerMapOnUser;
 
-
-    // ------------------------
-    // USER POSITION
-    // ------------------------
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(pos => {
+    function updateLocation() {
+        navigator.geolocation.getCurrentPosition(pos => {
             const { latitude, longitude } = pos.coords;
 
             const testingBtn = document.getElementById("testing");
-            // if (testingBtn)
-            testingBtn.textContent = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
-
+            console.log(testingBtn.textContent)
+            if (testingBtn)
+                testingBtn.textContent = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
 
             if (!userMarker) {
                 userMarker = L.circleMarker([latitude, longitude], {
@@ -58,12 +55,14 @@ export function initMap({ onPlay, onQueue }) {
         }, console.error, { enableHighAccuracy: true });
     }
 
-    // ------------------------
-    // SOCKET PINS
-    // ------------------------
-    const socket = io();
+    // update every 3 seconds
+    updateLocation();
+    setInterval(updateLocation, 3000);
+
+    // const socket = io();
     socket.on("pins", pins => renderPins(pins, onPlay, onQueue));
 }
+
 
 function autoQueueSong(lat, lng, onQueue) {
     const now = Date.now();
@@ -76,7 +75,7 @@ function autoQueueSong(lat, lng, onQueue) {
         if (distanceMeters(pLat, pLng, lat, lng) < 100) {
             const timeSince = now - (pin.lastQueuedAt || 0);
 
-            if (timeSince >= 5 * 60 * 1000) {
+            if (timeSince >= 5 * 1 * 1000) {
                 pinsToQueue.push(pin);
             }
         }
@@ -84,17 +83,20 @@ function autoQueueSong(lat, lng, onQueue) {
 
     pinsToQueue.forEach(pin => {
         pin.lastQueuedAt = now;
-        onQueue(pin.audio_url, pin.song, pin.artist, true); 
+        onQueue(pin.audio_url, pin.song, pin.artist, true);
     });
 }
+
 
 function centerMapOnUser() {
     if (!map || !userMarker) {
         alert("Your location is not yet available.");
         return;
     }
+    autoCenterView = true;
     map.setView(userMarker.getLatLng(), 15);
 }
+
 
 function renderPins(pins, onPlay, onQueue) {
     map.eachLayer(layer => {

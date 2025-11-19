@@ -83,12 +83,7 @@ app.post("/api/updateUser", (req, res) => {
 
   // Merge queue
   if (updates.queue) {
-    users[username].queue = users[username].queue || [];
-    updates.queue.forEach(song => {
-      if (!users[username].queue.find(s => s.url === song.url)) {
-        users[username].queue.push(song);
-      }
-    });
+    users[username].queue = updates.queue;
   }
 
   // Merge playlists

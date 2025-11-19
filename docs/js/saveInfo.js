@@ -34,28 +34,19 @@ export async function savePlaylists() {
 
 export async function saveQueue() {
   try {
-    const res = await fetch(`/api/getUser/${pubUsername}`);
-    const data = await res.json();
-    if (!data.success) return;
-
-    const serverQueue = data.data.queue || [];
-    const mergedQueue = [...serverQueue];
-
-    state.songQueue.forEach(s => {
-      if (!mergedQueue.find(q => q.url === s.url)) mergedQueue.push(s);
-    });
-
     await fetch("/api/updateUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: pubUsername, updates: { queue: mergedQueue } })
+      body: JSON.stringify({
+        username: pubUsername,
+        updates: { queue: state.songQueue }
+      })
     });
-
-    state.songQueue = mergedQueue; // update local queue
   } catch (err) {
     console.error(err);
   }
 }
+
 
 export async function saveManualQueue() {
   try {
