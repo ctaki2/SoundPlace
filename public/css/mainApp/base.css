@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html, body { 
+  height:100%; 
+  font-family:'Inter',sans-serif; 
+  background:#0f0f1a; 
+  color:#fff; 
+  overflow:hidden; 
+}
+
+:root {
+  --player-max-w: 640px;
+  --player-min-w: 280px;
+  --panel-max-w: 500px;
+  --panel-min-w: 300px;
+  --font-base: clamp(0.85rem, 2.2vw, 1rem);
+  --font-sm: clamp(0.75rem, 2vw, 0.9rem);
+  --font-lg: clamp(1.1rem, 2.8vw, 1.25rem);
+  --gap-sm: clamp(8px, 2vw, 12px);
+  --gap-md: clamp(12px, 3vw, 20px);
+  --gap-lg: clamp(20px, 4vw, 32px);
+  --pad-sm: clamp(12px, 3vw, 20px);
+  --pad-md: clamp(16px, 4vw, 24px);
+  --pad-lg: clamp(20px, 5vw, 32px);
+  --radius-sm: clamp(8px, 2vw, 12px);
+  --radius-md: clamp(12px, 3vw, 16px);
+  --radius-lg: clamp(16px, 4vw, 20px);
+  --shadow-glow: 0 0 clamp(20px, 4vw, 30px) rgba(233,69,96,.3);
+}
+
+#app-container { 
+  display:flex; 
+  height:100vh; 
+  position:relative;
+  padding-top: 70px;
+}
+
+#main-content { 
+  flex:1; 
+  position:relative; 
+  width: 100%;
+}
+
+#map { width:100%; height:100%; z-index:1; }
+
+#top-bar{
+  position:absolute; 
+  top:var(--gap-lg); 
+  left:50%; 
+  transform:translateX(-50%);
+  display:flex; 
+  gap:var(--gap-md); 
+  padding:12px 20px;
+  background:rgba(30,30,50,.8); 
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(100,200,255,.2); 
+  border-radius:var(--radius-md);
+  z-index:90;
+}

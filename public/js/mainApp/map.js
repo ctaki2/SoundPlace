@@ -75,7 +75,7 @@ function autoQueueSong(lat, lng, onQueue) {
         if (distanceMeters(pLat, pLng, lat, lng) < 100) {
             const timeSince = now - (pin.lastQueuedAt || 0);
 
-            if (timeSince >= 5 * 1 * 1000) {
+            if (timeSince >= 5 * 60 * 1000) {
                 pinsToQueue.push(pin);
             }
         }

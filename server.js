@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "docs")));
+app.use(express.static(path.join(__dirname, "public")));
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -107,6 +107,11 @@ app.post("/api/updateUser", (req, res) => {
   // Merge queueIndex
   if (updates.manualQueue !== undefined) {
     users[username].manualQueue = updates.manualQueue;
+  }
+
+  if (updates.history) {
+    users[username].history = users[username].history || [];
+    users[username].history.push(...updates.history);
   }
 
   saveUsers(users);

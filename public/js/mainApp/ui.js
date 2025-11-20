@@ -6,6 +6,7 @@ import { showTemporaryNotification } from "./helper.js";
 import { playSong } from "./app.js"; 
 
 const queueModalBody = document.getElementById("queueModalBody");
+const historyModalBody = document.getElementById("historyModalBody");
 const playlistModalBody = document.getElementById("playlistModalBody");
 const playlistOpt = document.getElementById("playlistOpt");
 
@@ -40,6 +41,35 @@ export function populateQueueUI() {
 
     queueModalBody.appendChild(el);
   });
+}
+
+export function populateHistoryUI() {
+  historyModalBody.innerHTML = ""
+
+  if (state.history.length == 0) {
+    const emptyState = document.createElement("div");
+    emptyState.className = "modal-empty";
+    emptyState.textContent = "No History";
+    historyModalBody.appendChild(emptyState)
+    return;
+  }
+
+  state.history.forEach((song,i) => {
+    const el = document.createElement("div");
+    el.className = i === state.songIndex ? "history-item current" : "history-item";
+    el.textContent = `${song.artist} — ${song.title}`;
+    
+    el.addEventListener("click", () => {
+      // state.songIndex = i;
+      playSong(song.url, song.title, song.artist);
+
+      populateHistoryUI();
+      // updateQueueIndex();
+    })
+
+    historyModalBody.appendChild(el)
+  });
+
 }
 
 export function populatePlaylistsUI() {

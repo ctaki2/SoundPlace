@@ -5,10 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SoundPlace</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="/app.css"/>
+  <link rel="stylesheet" href="css/mainApp/main.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<!-- APP HEADER -->
+<header id="app-header">
+  <div class="header-content">
+    <h1 id="app-logo">SoundPlace</h1>
+    <nav class="header-nav">
+      <button id="FindMe" class="nav-btn">📍 Find Me</button>
+      <button id="showQueueBtn" class="nav-btn">Queue</button>
+      <button id="showPlaylistBtnRight" class="nav-btn">Playlists</button>
+      <button id="historyBtn" class="nav-btn">History</button>
+      <button id="testing" class="nav-btn">Testing</button>
+    </nav>
+  </div>
+</header>
 
 <!-- FLOATING GLASS PLAYER -->
 <div id="floating-player">
@@ -30,12 +44,6 @@
 
 <!-- MAIN APP -->
 <div id="app-container">
-  <!-- TOGGLE BUTTONS - ALWAYS VISIBLE -->
-  <button id="showQueueBtn" class="panel-toggle">Queue</button>
-  <button id="showPlaylistBtnRight" class="panel-toggle">Playlists</button>
-  <button id="FindMe" class="panel-toggleT">Find Me</button>
-  <button id="testing" class="panel-toggleT">testing</button>
-
   <!-- CENTER: MAP + TOP BAR -->
   <main id="main-content">
     <div id="top-bar">
@@ -59,10 +67,16 @@
     <button class="modal-close">&times;</button>
   </div>
   <div class="modal-body" id="queueModalBody">
-    <!-- Queue items will be populated here -->
-    <div class="queue-item">Song 1 - Artist 1</div>
-    <div class="queue-item">Song 2 - Artist 2</div>
-    <div class="queue-item">Song 3 - Artist 3</div>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal" id="historyModal">
+  <div class="modal-header">
+    <h2 class="modal-title">History</h2>
+    <button class="modal-close">&times;</button>
+  </div>
+  <div class="modal-body" id="historyModalBody">
   </div>
 </div>
 
@@ -77,9 +91,6 @@
     <div class="dropdown">
       <button class="dropdown-btn">Favorites Playlist</button>
       <div class="dropdown-content">
-        <button class="song-btn">Song 1</button>
-        <button class="song-btn">Song 2</button>
-        <button class="song-btn">Song 3</button>
       </div>
     </div>
   </div>
@@ -93,4 +104,7 @@
 <!-- SCRIPTS -->
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/mainApp/app.js"></script>
+
+</body>
+</html>

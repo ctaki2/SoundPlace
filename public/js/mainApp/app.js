@@ -1,10 +1,10 @@
 // app.js 
 
 import {updateTimeLabel, showTemporaryNotification} from './helper.js';
-import {savePlaylists, saveQueue, saveManualQueue, updateQueueIndex} from './saveInfo.js';
+import {saveQueue, saveManualQueue, updateQueueIndex, saveHistory} from './saveInfo.js';
 import state, {pubUsername} from './variables.js'
-import { setCurrentSongRef, populateQueueUI, populatePlaylistsUI } from "./ui.js";
-import { initMap } from "./map.js";
+import {setCurrentSongRef, populateQueueUI, populateHistoryUI, populatePlaylistsUI} from "./ui.js";
+import {initMap} from "./map.js";
 
 const socket = io();
 let userData = null;
@@ -24,6 +24,7 @@ fetch(`/api/getUser/${pubUsername}`)
     } else {
       console.warn("User load failed:", data.message);
     }
+    populateHistoryUI();
     populateQueueUI();
     populatePlaylistsUI();          // <-- will also bind the "Create New" button
   });
@@ -32,15 +33,14 @@ fetch(`/api/getUser/${pubUsername}`)
 export const audioPlayer = new Audio()
 const songInfo = document.getElementById("songInfo");
 const playBtn = document.getElementById("playBtn"); const prevBtn = document.getElementById("prevBtn"); const nextBtn = document.getElementById("nextBtn");
-const showQueueBtn = document.getElementById("showQueueBtn"); const showPlaylistBtnRight = document.getElementById("showPlaylistBtnRight"); const playlistBtn = document.getElementById("playlistBtn");
+const showQueueBtn = document.getElementById("showQueueBtn"); const showPlaylistBtnRight = document.getElementById("showPlaylistBtnRight"); const playlistBtn = document.getElementById("playlistBtn"); 
+const historyBtn = document.getElementById("historyBtn")
 const seekSlider = document.getElementById("seekSlider");
 const playlistDropdown = document.querySelector("#top-bar .dropdown");
-const queueModal = document.getElementById("queueModal"); const playlistModal = document.getElementById("playlistModal");
+const queueModal = document.getElementById("queueModal"); const playlistModal = document.getElementById("playlistModal"); const historyModal = document.getElementById("historyModal")
 const modalOverlay = document.getElementById("modalOverlay"); const closeButtons = document.querySelectorAll('.modal-close');
 
-// ------------------
 // MODAL CONTROLS
-// ------------------
 function openModal(modal) {
   closeAllModals();
   modal.classList.add('active');
@@ -58,6 +58,7 @@ function closeAllModals() {
 
 // Modal event listeners
 showQueueBtn.addEventListener('click', () => openModal(queueModal));
+historyBtn.addEventListener('click', () => openModal(historyModal));
 showPlaylistBtnRight.addEventListener('click', () => openModal(playlistModal));
 modalOverlay.addEventListener('click', closeAllModals);
 
@@ -71,9 +72,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ------------------
-// AUDIO CONTROLS
-// ------------------
+
 export function playSong(url, title, artist) {
   currentSong = { url, title, artist };
   setCurrentSongRef(currentSong);
@@ -83,6 +82,11 @@ export function playSong(url, title, artist) {
   songInfo.textContent = `${artist} — ${title}`;
   playBtn.classList.replace("play", "pause");
   populateQueueUI();
+
+  if (!playProgress[url]) playProgress[url] = { played: 0, lastTime: 0, recorded: false };
+  else playProgress[url].played = 0;
+  playProgress[url].recorded = false;
+  playProgress[url].lastTime = audioPlayer.currentTime;
 }
 
 export function queueSong(url, title, artist, auto) {
@@ -159,9 +163,6 @@ audioPlayer.onended = () => {
   }
 };
 
-// ------------------
-// DROPDOWN CONTROLS
-// ------------------
 playlistBtn.onclick = e => {
   e.stopPropagation();
   playlistDropdown.classList.toggle("active");
@@ -180,3 +181,33 @@ initMap({
     },
     socket
 });
+
+const playProgress = {}; 
+audioPlayer.addEventListener("timeupdate", () => {
+  const url = currentSong?.url;
+  if (!url || !audioPlayer.duration) return;
+
+  const progress = playProgress[url];
+  const currentTime = audioPlayer.currentTime;
+
+  if (Math.abs(currentTime - progress.lastTime) < 1) {
+    progress.played += currentTime - progress.lastTime;
+  } else {
+    progress.played = 0; // reset if skipped
+  }
+
+  progress.lastTime = currentTime;
+
+  if (!progress.recorded && progress.played >= audioPlayer.duration * 0.05) {
+    progress.recorded = true;
+    const entry = { url, title: currentSong.title, artist: currentSong.artist, timestamp: Date.now() };
+    state.history.push(entry);
+    saveHistory([entry]);
+    populateHistoryUI();
+  }
+
+  seekSlider.value = currentTime;
+  updateTimeLabel();
+});
+
+

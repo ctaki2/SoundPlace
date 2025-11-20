@@ -1,0 +1,41 @@
+#app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(15, 15, 30, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  padding: 0 var(--gap-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.header-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#app-logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: #e0f7ff;
+  background: linear-gradient(135deg, #e94560, #64c8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.header-nav {
+  display: flex;
+  gap: var(--gap-sm);
+  align-items: center;
+}

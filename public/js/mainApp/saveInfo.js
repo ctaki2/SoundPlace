@@ -68,5 +68,14 @@ export function updateQueueIndex() {
   }).catch(console.error);
 }
 
-export async function saveHistory() {
+export async function saveHistory(songs) {
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { history: songs } })
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
