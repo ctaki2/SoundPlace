@@ -1,3 +1,4 @@
+<!-- app.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,37 +16,139 @@
   <div class="header-content">
     <h1 id="app-logo">SoundPlace</h1>
     <nav class="header-nav">
-      <button id="FindMe" class="nav-btn">📍 Find Me</button>
+      <div id="userSearchContainer" class="search-container">
+        <div class="search-input-wrapper">
+            <input 
+                type="text" 
+                id="userSearchInput" 
+                placeholder="Search users..." 
+                class="search-input"
+                aria-label="Search users"
+            >
+            <div class="search-icon"></div>
+        </div>
+        <div id="userSearchDropdown" class="search-dropdown hidden">
+        
+        </div>
+    </div>
+      <!-- <div id="userSearchContainer">
+        <input type="text" id="userSearchInput" placeholder="Search users...">
+        <div id="userSearchDropdown" class="hidden"></div>
+    </div> -->
+
+
       <button id="showQueueBtn" class="nav-btn">Queue</button>
       <button id="showPlaylistBtnRight" class="nav-btn">Playlists</button>
       <button id="historyBtn" class="nav-btn">History</button>
-      <button id="testing" class="nav-btn">Testing</button>
+      <!-- <button id="testing" class="nav-btn">Testing</button> -->
+      <button id="openSettingsBtn" class="nav-btn">Settings</button>
+
     </nav>
   </div>
 </header>
 
 <!-- FLOATING GLASS PLAYER -->
-<div id="floating-player">
+<div id="floating-player" class="mini-player">
   <div id="player-content">
     <div id="songInfo">No song playing</div>
+    
+    <div class="player-controls-row">
+      <div id="controls" class="icon-controls">
+        <button id="prevBtn" class="icon-btn prev" aria-label="Previous"></button>
+        <button id="playBtn" class="icon-btn play" aria-label="Play"></button>
+        <button id="nextBtn" class="icon-btn next" aria-label="Next"></button>
+      </div>
 
-    <div id="controls" class="icon-controls">
-      <button id="prevBtn" class="icon-btn prev" aria-label="Previous"></button>
-      <button id="playBtn" class="icon-btn play" aria-label="Play"></button>
-      <button id="nextBtn" class="icon-btn next" aria-label="Next"></button>
-    </div>
-
-    <div id="time-container">
-      <input type="range" id="seekSlider" min="0" value="0" step="0.01">
-      <span id="timeLabel">0:00 / 0:00</span>
+      <div id="time-container">
+        <input type="range" id="seekSlider" min="0" value="0" step="0.01">
+        <span id="timeLabel">0:00 / 0:00</span>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- SETTINGS / PROFILE MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="settings-container">
+    
+    <!-- Sidebar -->
+    <div class="settings-sidebar">
+      <div class="settings-title">Settings</div>
+      <button class="settings-tab active" data-section="profile">Profile</button>
+      <button class="settings-tab" data-section="permissions">Permissions</button>
+      <button class="settings-tab" data-section="controls">Controls</button>
+      <button class="settings-tab" data-section="account">Account</button>
+    </div>
+
+    <!-- Right Content -->
+    <div class="settings-content">
+
+      <!-- PROFILE -->
+      <div class="settings-section" id="section-profile">
+        <h2>Profile</h2>
+        <div class="settings-row">
+          <img id="settings-avatar" src="/images/default-avatar.jpg" class="settings-avatar">
+          <!-- <button class="secondary-btn">Change Avatar</button> -->
+        </div>
+
+        <label>Username</label>
+        <br>
+        <!-- <label>TextHolder</label> -->
+        <label id="settings-username">T</label>
+        <!-- <input type="text" id="settings-username" class="settings-input"> -->
+<!-- 
+        <label>Bio</label>
+        <textarea id="settings-bio" class="settings-input"></textarea> -->
+      </div>
+
+      <!-- PERMISSIONS -->
+      <div class="settings-section hidden" id="section-permissions">
+        <h2>Permissions</h2>
+        <label><input type="checkbox"> Allow users to view my playlists</label>
+        <br>
+        <label><input type="checkbox"> Allow users to see my location</label>
+        <br>
+        <label><input type="checkbox"> Allow users to auto-queue to me</label>
+        <br>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="settings-section hidden" id="section-controls">
+        <h2>Controls</h2>
+        <div class="settings-row">
+          <span class="settings-label">Share Location</span>
+
+          <label class="ios-switch">
+            <input type="checkbox" id="shareLocBtn">
+            <span class="slider"></span>
+          </label>
+          
+        </div>
+        <p> ⓘ SoundPlace uses your location to personalize your listening experience and queue songs nearby.</p>
+
+      </div>
+
+      <!-- ACCOUNT -->
+      <div class="settings-section hidden" id="section-account">
+        <h2>Account</h2>
+        <button class="danger-btn">Logout</button>
+        <button class="danger-btn">Delete Account</button>
+      </div>
+
+    </div>
+
+    <button class="modal-close settings-close">&times;</button>
+  </div>
+</div>
+
 
 <!-- MAIN APP -->
 <div id="app-container">
   <!-- CENTER: MAP + TOP BAR -->
   <main id="main-content">
+    <div id="map-controls">
+      <button id="FindMe" class="map-control-btn" title="Find My Location">📍</button>
+    </div>
     <div id="top-bar">
       <div class="dropdown">
         <button id="playlistBtn" class="bar-btn primary">Add to Playlist</button>
@@ -96,6 +199,32 @@
   </div>
 </div>
 
+<!-- USER PROFILE MODAL -->
+<div class="modal" id="userProfileModal">
+  <div class="modal-header">
+    <h2 class="modal-title" id="profileUsername">User Profile</h2>
+    <button class="modal-close">&times;</button>
+  </div>
+
+  <div class="modal-body" id="userProfileBody">
+      <div class="profile-section">
+          <img id="profileAvatar" class="profile-avatar" src="/images/default-avatar.jpg">
+      </div>
+
+      <div class="profile-info">
+          <p><strong>Username:</strong> <span id="profileName"></span></p>
+          <p><strong>Total Songs Played:</strong> <span id="profileHistoryCount">0</span></p>
+          <p><strong>Playlists:</strong> <span id="profilePlaylistCount">0</span></p>
+      </div>
+
+      <div class="profile-actions">
+          <button id="profileViewHistoryBtn" class="nav-btn">View History</button>
+          <button id="profileViewPlaylistsBtn" class="nav-btn">View Playlists</button>
+      </div>
+  </div>
+</div>
+
+
 <!-- MODAL OVERLAY -->
 <div class="modal-overlay" id="modalOverlay"></div>
 
@@ -104,7 +233,7 @@
 <!-- SCRIPTS -->
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module" src="/js/mainApp/app.js"></script>
+<script type="module" src="js/mainApp/app.js"></script>
 
 </body>
 </html>

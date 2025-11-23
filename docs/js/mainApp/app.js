@@ -20,13 +20,30 @@ fetch(`/api/getUser/${pubUsername}`)
       state.playlists = userData.playlists || {};
       state.history = userData.history || [];
       state.ManualQueue = userData.manualQueue || 0;
+      state.shareLoc = userData.shareLoc
       console.log("User loaded:", userData);
     } else {
       console.warn("User load failed:", data.message);
     }
+
+
+    document.getElementById("shareLocBtn").checked = state.shareLoc;
+    document.getElementById("FindMe").style.display = state.shareLoc ? "block" : "none";
+
+
     populateHistoryUI();
     populateQueueUI();
-    populatePlaylistsUI();          // <-- will also bind the "Create New" button
+    populatePlaylistsUI();   
+
+    initMap({
+        onPlay: playSong,
+        onQueue: (url, title, artist, auto) => {
+            if (!auto) state.ManualQueue++;
+            saveManualQueue()
+            queueSong(url, title, artist, auto);
+        },
+        socket
+    });
   });
 
 
@@ -172,15 +189,7 @@ window.onclick = () => {
   document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("active"));
 };
 
-initMap({
-    onPlay: playSong,
-    onQueue: (url, title, artist, auto) => {
-        if (!auto) state.ManualQueue++;
-        saveManualQueue()
-        queueSong(url, title, artist, auto);
-    },
-    socket
-});
+
 
 const playProgress = {}; 
 audioPlayer.addEventListener("timeupdate", () => {
@@ -210,4 +219,121 @@ audioPlayer.addEventListener("timeupdate", () => {
   updateTimeLabel();
 });
 
+
+const searchInput = document.getElementById("userSearchInput");
+const dropdown = document.getElementById("userSearchDropdown");
+
+let searchTimeout = null;
+
+searchInput.addEventListener("input", function () {
+    const query = this.value.trim();
+
+    // Clear previous typing delay
+    clearTimeout(searchTimeout);
+
+    // Don't search empty
+    if (query.length === 0) {
+        dropdown.classList.add("hidden");
+        dropdown.innerHTML = "";
+        return;
+    }
+
+    // Delay typing by 250ms before search
+    searchTimeout = setTimeout(() => {
+        fetch(`/api/searchUsers?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) return;
+
+                dropdown.innerHTML = "";
+
+                if (data.users.length === 0) {
+                    dropdown.innerHTML = `<div>No users found</div>`;
+                    dropdown.classList.remove("hidden");
+                    return;
+                }
+
+                data.users.forEach(user => {
+                    const item = document.createElement("div");
+                    item.textContent = user.username;
+
+                    item.onclick = () => {
+                        dropdown.classList.add("hidden");
+                        dropdown.innerHTML = "";
+                        openUserProfile(user.username);
+                    };
+
+
+                    dropdown.appendChild(item);
+                });
+
+                dropdown.classList.remove("hidden");
+            });
+    }, 250);
+});
+
+// Clicking outside hides dropdown
+document.addEventListener("click", (e) => {
+    if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add("hidden");
+    }
+});
+
+
+function openUserProfile(username) {
+    fetch(`/api/getUser/${username}`)
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) return;
+
+        const user = data.data;
+
+        // Fill modal
+        document.getElementById("profileUsername").innerText = `${username}'s Profile`;
+        document.getElementById("profileName").innerText = username;
+        document.getElementById("profileHistoryCount").innerText = user.history?.length || 0;
+        document.getElementById("profilePlaylistCount").innerText = Object.keys(user.playlists || {}).length;
+
+        // Optional: if you want avatars later
+        document.getElementById("profileAvatar").src = user.avatar || "/images/default-avatar.jpg";
+
+        openModal(document.getElementById("userProfileModal"));
+    });
+}
+
+// document.getElementById("profileViewHistoryBtn").onclick = () => {
+//     const username = document.getElementById("profileName").innerText;
+//     window.location.href = `/history/${username}`;
+// };
+
+// document.getElementById("profileViewPlaylistsBtn").onclick = () => {
+//     const username = document.getElementById("profileName").innerText;
+//     window.location.href = `/playlists/${username}`;
+// };
+
+// SETTINGS MODAL CONTROLS
+const settingsModal = document.getElementById("settingsModal");
+const settingsTabs = document.querySelectorAll(".settings-tab");
+const settingsSections = document.querySelectorAll(".settings-section");
+document.getElementById("settings-username").innerText = pubUsername
+
+// open/close button (you add your own trigger)
+document.getElementById("openSettingsBtn")?.addEventListener("click", () => {
+    openModal(settingsModal);
+});
+
+// tab switching
+settingsTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+        // remove active from all tabs
+        settingsTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        const target = tab.dataset.section;
+
+        settingsSections.forEach(section => {
+            section.classList.toggle("hidden", section.id !== `section-${target}`);
+        });
+    });
+});
 

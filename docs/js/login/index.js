@@ -1,4 +1,5 @@
 // index.js
+
 document.addEventListener("DOMContentLoaded", () => {
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const data = await res.json();
     message.textContent = data.message;
-
+// /Users/rayyanathar/Desktop/SoundPlace/docs/html/app.html
     if (data.success) {
       sessionStorage.setItem("user", username);
       window.location.href = "/app.html";

@@ -1,14 +1,45 @@
 // map.js
-
+import state from "./variables.js"
 import { distanceMeters } from "./helper.js";
+import { saveShareLoc } from "./saveInfo.js";
 
-const testingBtn = document.getElementById("testing");
+const shareLocationBtn = document.getElementById("shareLocBtn");
+const FindMe = document.getElementById("FindMe");
 
 let map, userMarker;
 let autoCenterView = true;
+// let share = true;
+let locationInterval = null;
+let userPosition = null;
+let locationSharing = true;
+
+
 export const Pins = {};
 
+shareLocationBtn.onclick = () => {
+    state.shareLoc = !state.shareLoc;
+    locationSharing = state.shareLoc;
+    // state.shareLoc = share;
+    saveShareLoc()
+
+    FindMe.style.display = state.shareLoc ? "block" : "none";
+
+    if (state.shareLoc) {
+        startLocationSharing();
+    } else {
+        stopLocationSharing();
+    }
+};
+
+
+// ---------------------------------------------------------------
+// INIT MAP
+// ---------------------------------------------------------------
+let globalOnQueue = null; // store callback
+
 export function initMap({ onPlay, onQueue, socket }) {
+    globalOnQueue = onQueue;
+
     map = L.map("map").setView([41.8781, -87.6298], 13);
 
     L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
@@ -17,54 +48,101 @@ export function initMap({ onPlay, onQueue, socket }) {
         maxZoom: 19
     }).addTo(map);
 
-    map.on("movestart", () => {
-        autoCenterView = false;
-    });
+    map.on("movestart", () => autoCenterView = false);
 
-    const FindMe = document.getElementById("FindMe");
+    
     if (FindMe) FindMe.onclick = centerMapOnUser;
 
-    function updateLocation() {
-        navigator.geolocation.getCurrentPosition(pos => {
-            const { latitude, longitude } = pos.coords;
-
-            const testingBtn = document.getElementById("testing");
-            console.log(testingBtn.textContent)
-            if (testingBtn)
-                testingBtn.textContent = `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
-
-            if (!userMarker) {
-                userMarker = L.circleMarker([latitude, longitude], {
-                    radius: 8,
-                    fillColor: "#64c8ff",
-                    color: "#fff",
-                    weight: 2,
-                    fillOpacity: 1
-                }).addTo(map);
-                map.setView([latitude, longitude], 15);
-            } else {
-                userMarker.setLatLng([latitude, longitude]);
-            }
-
-            if (autoCenterView) {
-                map.setView([latitude, longitude], 15);
-            }
-
-            autoQueueSong(latitude, longitude, onQueue);
-
-        }, console.error, { enableHighAccuracy: true });
+    if (state.shareLoc){
+    // Start sharing by default
+        startLocationSharing();
     }
 
-    // update every 3 seconds
-    updateLocation();
-    setInterval(updateLocation, 3000);
-
-    // const socket = io();
     socket.on("pins", pins => renderPins(pins, onPlay, onQueue));
 }
 
+// ---------------------------------------------------------------
+// LOCATION SHARING
+// ---------------------------------------------------------------
+function startLocationSharing() {
+    state.shareLoc = true;
+    locationSharing = true;
 
+    if (!locationInterval) {
+        updateLocation(); // run once immediately
+        locationInterval = setInterval(updateLocation, 3000);
+    }
+}
+
+
+function stopLocationSharing() {
+    state.shareLoc = false;
+    locationSharing = false;
+
+    // Stop interval
+    if (locationInterval) {
+        clearInterval(locationInterval);
+        locationInterval = null;
+    }
+
+    // Remove marker from map
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        userMarker = null;
+    }
+
+    // Disable abilities
+    userPosition = null;
+    autoCenterView = false; // user isn't sharing, so do NOT center
+}
+
+
+// ---------------------------------------------------------------
+// UPDATE LOCATION
+// ---------------------------------------------------------------
+function updateLocation() {
+
+    if (!state.shareLoc) return;            // <-- prevents updates entirely
+    if (!locationSharing) return;  // <-- safety check
+
+    navigator.geolocation.getCurrentPosition(pos => {
+
+        const { latitude, longitude } = pos.coords;
+        userPosition = [latitude, longitude];
+
+        // If marker doesn't exist → create
+        if (!userMarker) {
+            userMarker = L.circleMarker(userPosition, {
+                radius: 8,
+                fillColor: "#64c8ff",
+                color: "#fff",
+                weight: 2,
+                fillOpacity: 1
+            }).addTo(map);
+
+            map.setView(userPosition, 15);
+        } else {
+            userMarker.setLatLng(userPosition);
+        }
+
+        // Only center if user hasn't manually moved
+        if (autoCenterView) {
+            map.setView(userPosition, 15);
+        }
+
+        // Still auto-queue only when sharing  
+        autoQueueSong(latitude, longitude, globalOnQueue);
+
+    }, console.error, { enableHighAccuracy: true });
+}
+
+
+// ---------------------------------------------------------------
+// AUTO QUEUE SONG
+// ---------------------------------------------------------------
 function autoQueueSong(lat, lng, onQueue) {
+    if (!onQueue) return;
+
     const now = Date.now();
     const pinsToQueue = [];
 
@@ -87,17 +165,14 @@ function autoQueueSong(lat, lng, onQueue) {
     });
 }
 
-
+// ---------------------------------------------------------------
 function centerMapOnUser() {
-    if (!map || !userMarker) {
-        alert("Your location is not yet available.");
-        return;
-    }
-    autoCenterView = true;
-    map.setView(userMarker.getLatLng(), 15);
+    if (!locationSharing || !userPosition) return;
+    map.setView(userPosition, 15);
 }
 
 
+// ---------------------------------------------------------------
 function renderPins(pins, onPlay, onQueue) {
     map.eachLayer(layer => {
         if (layer instanceof L.Marker && layer !== userMarker) {
@@ -126,20 +201,30 @@ function renderPins(pins, onPlay, onQueue) {
 
         marker.bindPopup(`
             <div class="popup-content">
-                <b>${pin.artist}</b><br>
-                <i>${pin.song}</i><br><br>
-                <button class="popup-play-btn">Play</button>
-                <button class="popup-queue-btn">Queue</button>
+                <div class="popup-header">
+                    <div class="popup-avatar">${pin.artist.charAt(0)}</div>
+                    <div class="popup-artist">${pin.artist}</div>
+                </div>
+                <div class="popup-song">${pin.song}</div>
+                <div class="popup-actions">
+                    <button class="popup-play-btn">
+                        <span class="btn-icon">▶</span>
+                        Play
+                    </button>
+                    <button class="popup-queue-btn">
+                        <span class="btn-icon">⏭</span>
+                        Queue
+                    </button>
+                </div>
             </div>
         `);
 
         marker.on("popupopen", e => {
             const popup = e.popup.getElement();
-            popup.querySelector(".popup-play-btn").onclick = () =>
-                onPlay(pin.audio_url, pin.song, pin.artist);
-
-            popup.querySelector(".popup-queue-btn").onclick = () =>
-                onQueue(pin.audio_url, pin.song, pin.artist, false);
+            popup.querySelector(".popup-play-btn").onclick =
+                () => onPlay(pin.audio_url, pin.song, pin.artist);
+            popup.querySelector(".popup-queue-btn").onclick =
+                () => onQueue(pin.audio_url, pin.song, pin.artist, false);
         });
     });
 }

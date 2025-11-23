@@ -1,4 +1,5 @@
 // server.js
+
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
@@ -51,7 +52,9 @@ app.post("/api/register", (req, res) => {
     queue: [],
     queueIndex: -1,
     manualQueue: 0,
-    history: []
+    history: [],
+    friends: {},
+    shareLoc: true
   };
 
   saveUsers(users);
@@ -114,6 +117,14 @@ app.post("/api/updateUser", (req, res) => {
     users[username].history.push(...updates.history);
   }
 
+  if (updates.friends) {
+    
+  }
+
+  if (updates.shareLoc !== undefined) {
+    users[username].shareLoc = updates.shareLoc
+  }
+
   saveUsers(users);
   res.json({ success: true, message: "User data saved" });
 });
@@ -128,6 +139,31 @@ app.get("/api/getUser/:username", (req, res) => {
   }
 
   res.json({ success: true, data: users[username] });
+});
+
+app.get("/api/searchUsers", (req, res) => {
+  const query = req.query.q?.toLowerCase() || "";
+
+  if (query.length === 0) {
+    return res.json({ success: true, users: [] });
+  }
+
+  try {
+    const users = loadUsers();   // your existing function that loads JSON
+
+    // users is an object: { ABC:{...}, XYZ:{...} }
+    const usernames = Object.keys(users);
+
+    const matches = usernames
+      .filter(name => name.toLowerCase().includes(query))
+      .map(name => ({ username: name }))  // return only username unless you want more
+      .slice(0, 20);
+
+    res.json({ success: true, users: matches });
+  } catch (err) {
+    console.error("Search error:", err);
+    res.json({ success: false, message: "Search failed" });
+  }
 });
 
 

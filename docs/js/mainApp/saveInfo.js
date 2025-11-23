@@ -79,3 +79,21 @@ export async function saveHistory(songs) {
     console.error(err);
   }
 }
+
+export async function saveFriends() {
+
+}
+
+export async function saveShareLoc() {
+
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { shareLoc: state.shareLoc } })
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
+}
