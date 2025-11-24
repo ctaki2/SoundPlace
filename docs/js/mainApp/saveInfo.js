@@ -97,3 +97,17 @@ export async function saveShareLoc() {
   }
 
 }
+
+export async function saveIntList() {
+
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { intList: state.intList } })
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
+}

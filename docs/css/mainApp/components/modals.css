@@ -136,3 +136,14 @@
   color: rgba(233,69,96,.8);
   font-size: 0.8em;
 }
+
+.friend-item, .friend-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.friend-name {
+  font-weight: 600;
+}

@@ -40,8 +40,8 @@
       <button id="showQueueBtn" class="nav-btn">Queue</button>
       <button id="showPlaylistBtnRight" class="nav-btn">Playlists</button>
       <button id="historyBtn" class="nav-btn">History</button>
-      <!-- <button id="testing" class="nav-btn">Testing</button> -->
-      <button id="openSettingsBtn" class="nav-btn">Settings</button>
+      <button id="friendsBtn" class="nav-btn">Friends</button>
+      <button id="openSettingsBtn" class="profile-btn"></button>
 
     </nav>
   </div>
@@ -59,88 +59,181 @@
         <button id="nextBtn" class="icon-btn next" aria-label="Next"></button>
       </div>
 
+      
+
       <div id="time-container">
         <input type="range" id="seekSlider" min="0" value="0" step="0.01">
         <span id="timeLabel">0:00 / 0:00</span>
+      </div>
+
+      <div id="player-actions">
+        <div class="dropdown">
+          <button id="playlistBtn" class="player-add-btn" title="Add to Playlist">♥</button>
+          <div id="playlistOpt" class="dropdown-menu">
+            <button id="createPlaylistBtn" class="menu-item">Create New</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- SETTINGS / PROFILE MODAL -->
+<!-- SETTINGS / PROFILE MODAL -->
 <div class="modal" id="settingsModal">
   <div class="settings-container">
     
     <!-- Sidebar -->
     <div class="settings-sidebar">
-      <div class="settings-title">Settings</div>
-      <button class="settings-tab active" data-section="profile">Profile</button>
-      <button class="settings-tab" data-section="permissions">Permissions</button>
-      <button class="settings-tab" data-section="controls">Controls</button>
-      <button class="settings-tab" data-section="account">Account</button>
+      <div class="settings-header">
+        <h2 class="settings-title">Settings</h2>
+        <div class="settings-user">
+          <span class="user-name" id="settings-username">Username</span>
+        </div>
+      </div>
+      <nav class="settings-nav">
+        <button class="settings-tab active" data-section="profile">
+          Profile
+        </button>
+        <!-- <button class="settings-tab" data-section="permissions">
+          Permissions
+        </button> -->
+        <button class="settings-tab" data-section="controls">
+          Controls
+        </button>
+        <button class="settings-tab" data-section="account">
+          Account
+        </button>
+      </nav>
     </div>
 
     <!-- Right Content -->
     <div class="settings-content">
-
       <!-- PROFILE -->
-      <div class="settings-section" id="section-profile">
-        <h2>Profile</h2>
-        <div class="settings-row">
-          <img id="settings-avatar" src="/images/default-avatar.jpg" class="settings-avatar">
-          <!-- <button class="secondary-btn">Change Avatar</button> -->
+      <div class="settings-section active" id="section-profile">
+        <div class="section-header">
+          <h3>Profile Settings</h3>
+          <p>Manage your profile information</p>
         </div>
+        
+        <!-- <div class="profile-avatar-section">
+          <div class="avatar-container">
+            <img id="settings-avatar" src="/images/default-avatar.jpg" class="settings-avatar">
+            <div class="avatar-overlay">
+              <span class="change-avatar-text">Change</span>
+            </div>
+          </div>
+        </div> -->
 
-        <label>Username</label>
-        <br>
-        <!-- <label>TextHolder</label> -->
-        <label id="settings-username">T</label>
-        <!-- <input type="text" id="settings-username" class="settings-input"> -->
-<!-- 
-        <label>Bio</label>
-        <textarea id="settings-bio" class="settings-input"></textarea> -->
+        <div class="profile-info">
+          <div class="info-item">
+            <label class="info-label">Username</label>
+            <div class="info-value" id="settings-username-display">Username</div>
+          </div>
+        </div>
       </div>
 
       <!-- PERMISSIONS -->
       <div class="settings-section hidden" id="section-permissions">
-        <h2>Permissions</h2>
-        <label><input type="checkbox"> Allow users to view my playlists</label>
-        <br>
-        <label><input type="checkbox"> Allow users to see my location</label>
-        <br>
-        <label><input type="checkbox"> Allow users to auto-queue to me</label>
-        <br>
+        <div class="section-header">
+          <h3>Privacy & Permissions</h3>
+          <p>Control what others can see</p>
+        </div>
+        
+        <div class="permissions-list">
+          <div class="permission-item">
+            <div class="permission-info">
+              <span class="permission-title">View Playlists</span>
+              <span class="permission-desc">Allow users to see your playlists</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div class="permission-item">
+            <div class="permission-info">
+              <span class="permission-title">Share Location</span>
+              <span class="permission-desc">Allow users to see your location</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div class="permission-item">
+            <div class="permission-info">
+              <span class="permission-title">Auto-Queue</span>
+              <span class="permission-desc">Allow users to queue songs to you</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- CONTROLS -->
       <div class="settings-section hidden" id="section-controls">
-        <h2>Controls</h2>
-        <div class="settings-row">
-          <span class="settings-label">Share Location</span>
-
-          <label class="ios-switch">
-            <input type="checkbox" id="shareLocBtn">
-            <span class="slider"></span>
-          </label>
-          
+        <div class="section-header">
+          <h3>Playback Controls</h3>
+          <p>Customize your listening experience</p>
         </div>
-        <p> ⓘ SoundPlace uses your location to personalize your listening experience and queue songs nearby.</p>
-
+        
+        <div class="controls-list">
+          <div class="control-item">
+            <div class="control-info">
+              <span class="control-title">Share Location</span>
+              <span class="control-desc">Enable location-based features</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" id="shareLocBtn" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div class="control-item">
+            <div class="control-info">
+              <span class="control-title">Intentional Listening</span>
+              <span class="control-desc">Prevent skipping songs</span>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" id="intListBtn">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="info-note">
+          <span class="info-icon">ⓘ</span>
+          SoundPlace uses your location to personalize your listening experience and queue songs nearby.
+        </div>
       </div>
 
       <!-- ACCOUNT -->
       <div class="settings-section hidden" id="section-account">
-        <h2>Account</h2>
-        <button class="danger-btn">Logout</button>
-        <button class="danger-btn">Delete Account</button>
+        <div class="section-header">
+          <h3>Account Management</h3>
+          <p>Manage your account settings</p>
+        </div>
+        
+        <div class="account-actions">
+          <button class="account-btn logout-btn" id="logoutBtn">
+            Logout
+          </button>
+          <button class="account-btn danger-btn" id="deleteBtn">
+            Delete Account
+          </button>
+        </div>
       </div>
-
     </div>
 
     <button class="modal-close settings-close">&times;</button>
   </div>
 </div>
-
 
 <!-- MAIN APP -->
 <div id="app-container">
@@ -149,14 +242,7 @@
     <div id="map-controls">
       <button id="FindMe" class="map-control-btn" title="Find My Location">📍</button>
     </div>
-    <div id="top-bar">
-      <div class="dropdown">
-        <button id="playlistBtn" class="bar-btn primary">Add to Playlist</button>
-        <div id="playlistOpt" class="dropdown-menu">
-          <button id="createPlaylistBtn" class="menu-item">Create New</button>
-        </div>
-      </div>
-    </div>
+    
 
     <!-- MAP -->
     <div id="map"></div>
@@ -198,6 +284,22 @@
     </div>
   </div>
 </div>
+
+<!-- FRIENDS MODAL -->
+<div class="modal" id="friendsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Friends</h2>
+            <button class="modal-close" type="button">&times;</button>
+        </div>
+
+        <div class="modal-body" id="friendsModalBody">
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- USER PROFILE MODAL -->
 <div class="modal" id="userProfileModal">

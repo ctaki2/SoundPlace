@@ -1,10 +1,11 @@
 // app.js 
 
 import {updateTimeLabel, showTemporaryNotification} from './helper.js';
-import {saveQueue, saveManualQueue, updateQueueIndex, saveHistory} from './saveInfo.js';
+import {saveQueue, saveManualQueue, updateQueueIndex, saveHistory, saveIntList} from './saveInfo.js';
 import state, {pubUsername} from './variables.js'
 import {setCurrentSongRef, populateQueueUI, populateHistoryUI, populatePlaylistsUI} from "./ui.js";
 import {initMap} from "./map.js";
+import { initSettings } from "./settings.js";
 
 const socket = io();
 let userData = null;
@@ -21,14 +22,20 @@ fetch(`/api/getUser/${pubUsername}`)
       state.history = userData.history || [];
       state.ManualQueue = userData.manualQueue || 0;
       state.shareLoc = userData.shareLoc
+      state.intList = userData.intList
       console.log("User loaded:", userData);
     } else {
       console.warn("User load failed:", data.message);
     }
 
+    document.getElementById("openSettingsBtn").textContent = pubUsername[0]
 
     document.getElementById("shareLocBtn").checked = state.shareLoc;
     document.getElementById("FindMe").style.display = state.shareLoc ? "block" : "none";
+
+    document.getElementById("intListBtn").checked = state.intList;
+    document.getElementById("prevBtn").style.display = !state.intList ? "block" : "none";
+    document.getElementById("nextBtn").style.display = !state.intList ? "block" : "none";
 
 
     populateHistoryUI();
@@ -46,19 +53,61 @@ fetch(`/api/getUser/${pubUsername}`)
     });
   });
 
-
+  
 export const audioPlayer = new Audio()
 const songInfo = document.getElementById("songInfo");
 const playBtn = document.getElementById("playBtn"); const prevBtn = document.getElementById("prevBtn"); const nextBtn = document.getElementById("nextBtn");
 const showQueueBtn = document.getElementById("showQueueBtn"); const showPlaylistBtnRight = document.getElementById("showPlaylistBtnRight"); const playlistBtn = document.getElementById("playlistBtn"); 
 const historyBtn = document.getElementById("historyBtn")
 const seekSlider = document.getElementById("seekSlider");
-const playlistDropdown = document.querySelector("#top-bar .dropdown");
+const playlistDropdown = document.querySelector("#player-actions .dropdown");
 const queueModal = document.getElementById("queueModal"); const playlistModal = document.getElementById("playlistModal"); const historyModal = document.getElementById("historyModal")
 const modalOverlay = document.getElementById("modalOverlay"); const closeButtons = document.querySelectorAll('.modal-close');
 
+
+
+
+
+// // SETTINGS MODAL CONTROLS
+// const settingsModal = document.getElementById("settingsModal");
+// const settingsTabs = document.querySelectorAll(".settings-tab");
+// const settingsSections = document.querySelectorAll(".settings-section");
+// document.getElementById("settings-username").innerText = pubUsername
+
+// // open/close button (you add your own trigger)
+// document.getElementById("openSettingsBtn")?.addEventListener("click", () => {
+//     openModal(settingsModal);
+// });
+
+// // tab switching
+// settingsTabs.forEach(tab => {
+//     tab.addEventListener("click", () => {
+//         // remove active from all tabs
+//         settingsTabs.forEach(t => t.classList.remove("active"));
+//         tab.classList.add("active");
+
+//         const target = tab.dataset.section;
+
+//         settingsSections.forEach(section => {
+//             section.classList.toggle("hidden", section.id !== `section-${target}`);
+//         });
+//     });
+// });
+
+
+// const intListBtn = document.getElementById("intListBtn")
+
+// intListBtn.onclick = () => {
+//   state.intList = !state.intList;
+
+//   saveIntList()
+
+//   prevBtn.style.display = !state.intList ? "block" : "none";
+//   nextBtn.style.display = !state.intList ? "block" : "none";
+// }
+
 // MODAL CONTROLS
-function openModal(modal) {
+export function openModal(modal) {
   closeAllModals();
   modal.classList.add('active');
   modalOverlay.classList.add('active');
@@ -87,6 +136,17 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeAllModals();
   }
+});
+
+initSettings();
+
+
+const friendsBtn = document.getElementById("friendsBtn");
+const friendsModal = document.getElementById("friendsModal");
+
+friendsBtn.addEventListener("click", () => {
+    loadFriendsUI();
+    openModal(friendsModal);
 });
 
 
@@ -189,8 +249,6 @@ window.onclick = () => {
   document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("active"));
 };
 
-
-
 const playProgress = {}; 
 audioPlayer.addEventListener("timeupdate", () => {
   const url = currentSong?.url;
@@ -219,12 +277,10 @@ audioPlayer.addEventListener("timeupdate", () => {
   updateTimeLabel();
 });
 
-
 const searchInput = document.getElementById("userSearchInput");
 const dropdown = document.getElementById("userSearchDropdown");
 
 let searchTimeout = null;
-
 searchInput.addEventListener("input", function () {
     const query = this.value.trim();
 
@@ -283,57 +339,271 @@ document.addEventListener("click", (e) => {
 function openUserProfile(username) {
     fetch(`/api/getUser/${username}`)
     .then(res => res.json())
-    .then(data => {
+    .then(async (data) => {
         if (!data.success) return;
 
         const user = data.data;
 
-        // Fill modal
+        // Fill modal basic info
         document.getElementById("profileUsername").innerText = `${username}'s Profile`;
         document.getElementById("profileName").innerText = username;
         document.getElementById("profileHistoryCount").innerText = user.history?.length || 0;
         document.getElementById("profilePlaylistCount").innerText = Object.keys(user.playlists || {}).length;
-
-        // Optional: if you want avatars later
         document.getElementById("profileAvatar").src = user.avatar || "/images/default-avatar.jpg";
 
+        // Fetch current viewer's friend state (pubUsername)
+        const viewerRes = await fetch(`/api/friend/list/${pubUsername}`);
+        const viewerData = await viewerRes.json();
+        const viewerFriends = (viewerData.success && viewerData.friends) ? viewerData.friends : [];
+        const viewerSent = (viewerData.success && viewerData.requestsSent) ? viewerData.requestsSent : [];
+        const viewerReceived = (viewerData.success && viewerData.requestsReceived) ? viewerData.requestsReceived : [];
+
+        // Determine relationship status
+        const isFriend = viewerFriends.includes(username);
+        const sentRequest = viewerSent.includes(username);
+        const receivedRequest = viewerReceived.includes(username);
+
+        // Build friend action area
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "profile-actions";
+
+        // Helper to simplify creating buttons
+        function makeBtn(id, text, onClick) {
+          const b = document.createElement("button");
+          b.id = id;
+          b.className = "nav-btn";
+          b.textContent = text;
+          b.onclick = onClick;
+          return b;
+        }
+
+        // Clear existing actions area and re-add
+        const oldActions = document.querySelector("#userProfileModal .profile-actions");
+        if (oldActions) oldActions.remove();
+
+        const profileBody = document.getElementById("userProfileBody");
+        profileBody.appendChild(actionsDiv);
+
+        if (username === pubUsername) {
+          // viewing self: show nothing (or settings)
+          actionsDiv.appendChild(makeBtn("profileEditBtn", "Edit Profile", () => { openModal(settingsModal); }));
+        } else if (isFriend) {
+          actionsDiv.appendChild(makeBtn("removeFriendBtn", "Remove Friend", async () => {
+            await fetch("/api/friend/remove", { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({ a: pubUsername, b: username })});
+            showTemporaryNotification(`Removed ${username}`);
+            openUserProfile(username); // refresh modal state
+          }));
+
+          // Optionally add "View Live Location" / "Follow" features here
+        } else if (sentRequest) {
+          actionsDiv.appendChild(makeBtn("cancelRequestBtn", "Cancel Request", async () => {
+            await fetch("/api/friend/cancel", { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({ from: pubUsername, to: username })});
+            showTemporaryNotification(`Cancelled request to ${username}`);
+            openUserProfile(username);
+          }));
+        } else if (receivedRequest) {
+          actionsDiv.appendChild(makeBtn("acceptBtn", "Accept", async () => {
+            await fetch("/api/friend/accept", { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({ from: username, to: pubUsername })});
+            showTemporaryNotification(`You and ${username} are now friends`);
+            openUserProfile(username);
+          }));
+          actionsDiv.appendChild(makeBtn("declineBtn", "Decline", async () => {
+            await fetch("/api/friend/decline", { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({ from: username, to: pubUsername })});
+            showTemporaryNotification(`Declined ${username}'s request`);
+            openUserProfile(username);
+          }));
+        } else {
+          actionsDiv.appendChild(makeBtn("addFriendBtn", "Add Friend", async () => {
+            await fetch("/api/friend/send", { method: "POST", headers: {'Content-Type':'application/json'}, body: JSON.stringify({ from: pubUsername, to: username })});
+            showTemporaryNotification(`Friend request sent to ${username}`);
+            openUserProfile(username);
+          }));
+        }
+
+        // finally open modal
         openModal(document.getElementById("userProfileModal"));
+    })
+    .catch(err => {
+      console.error("Profile load failed", err);
     });
 }
 
-// document.getElementById("profileViewHistoryBtn").onclick = () => {
-//     const username = document.getElementById("profileName").innerText;
-//     window.location.href = `/history/${username}`;
-// };
 
-// document.getElementById("profileViewPlaylistsBtn").onclick = () => {
-//     const username = document.getElementById("profileName").innerText;
-//     window.location.href = `/playlists/${username}`;
-// };
+// ---------- Render friends UI (no per-button onclicks) ----------
+function loadFriendsUI() {
+  const body = document.getElementById("friendsModalBody");
+  body.innerHTML = "<p>Loading...</p>";
 
-// SETTINGS MODAL CONTROLS
-const settingsModal = document.getElementById("settingsModal");
-const settingsTabs = document.querySelectorAll(".settings-tab");
-const settingsSections = document.querySelectorAll(".settings-section");
-document.getElementById("settings-username").innerText = pubUsername
+  fetch(`/api/friend/list/${pubUsername}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        body.innerHTML = `<p>Failed to load friends.</p>`;
+        return;
+      }
 
-// open/close button (you add your own trigger)
-document.getElementById("openSettingsBtn")?.addEventListener("click", () => {
-    openModal(settingsModal);
-});
+      const { friends = [], requestsReceived = [], requestsSent = [] } = data;
 
-// tab switching
-settingsTabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-        // remove active from all tabs
-        settingsTabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+      body.innerHTML = ""; // clear
 
-        const target = tab.dataset.section;
-
-        settingsSections.forEach(section => {
-            section.classList.toggle("hidden", section.id !== `section-${target}`);
+      // FRIENDS
+      const friendSection = document.createElement("div");
+      friendSection.innerHTML = `<h3>Your Friends</h3>`;
+      if (friends.length === 0) {
+        friendSection.innerHTML += `<p>No friends yet.</p>`;
+      } else {
+        friends.forEach(u => {
+          const item = document.createElement("div");
+          item.className = "friend-item";
+          // view button uses data-action and data-user
+          item.innerHTML = `
+            <span class="friend-name">${u}</span>
+            <button type="button" class="nav-btn" data-action="view" data-user="${u}">View</button>
+            <button type="button" class="nav-btn" data-action="unfriend" data-user="${u}">Unfriend</button>
+          `;
+          friendSection.appendChild(item);
         });
+      }
+
+      // RECEIVED
+      const recvSection = document.createElement("div");
+      recvSection.innerHTML = `<h3>Friend Requests</h3>`;
+      if (requestsReceived.length === 0) {
+        recvSection.innerHTML += `<p>No incoming requests.</p>`;
+      } else {
+        requestsReceived.forEach(u => {
+          const row = document.createElement("div");
+          row.className = "friend-row";
+          row.innerHTML = `
+            <span>${u}</span>
+            <button type="button" class="nav-btn" data-action="accept" data-user="${u}">Accept</button>
+            <button type="button" class="nav-btn" data-action="decline" data-user="${u}">Decline</button>
+          `;
+          recvSection.appendChild(row);
+        });
+      }
+
+      // SENT
+      const sentSection = document.createElement("div");
+      sentSection.innerHTML = `<h3>Sent Requests</h3>`;
+      if (requestsSent.length === 0) {
+        sentSection.innerHTML += `<p>No pending requests.</p>`;
+      } else {
+        requestsSent.forEach(u => {
+          const row = document.createElement("div");
+          row.className = "friend-row";
+          row.innerHTML = `
+            <span>${u}</span>
+            <button type="button" class="nav-btn" data-action="cancel" data-user="${u}">Cancel Request</button>
+          `;
+          sentSection.appendChild(row);
+        });
+      }
+
+      // Append
+      body.appendChild(friendSection);
+      body.appendChild(document.createElement("hr"));
+      body.appendChild(recvSection);
+      body.appendChild(document.createElement("hr"));
+      body.appendChild(sentSection);
+    })
+    .catch(err => {
+      console.error("Failed to load friends:", err);
+      document.getElementById("friendsModalBody").innerHTML = `<p>Error loading friends.</p>`;
     });
-});
+}
+
+// ---------- Event delegation for Friends modal ----------
+// This ensures click handlers survive re-render and aren't blocked by bubbling issues.
+const friendsModalBody = document.getElementById("friendsModalBody");
+
+// remove any existing listener (safe to call multiple times)
+if (friendsModalBody._friendsHandler) {
+  friendsModalBody.removeEventListener("click", friendsModalBody._friendsHandler);
+}
+
+friendsModalBody._friendsHandler = async function (e) {
+  const btn = e.target.closest("button[data-action], button[data-user]");
+  if (!btn) return;
+
+  // prevent any overlay/window click handlers from interfering
+  e.stopPropagation();
+  e.preventDefault();
+
+  const action = btn.getAttribute("data-action");
+  const username = btn.getAttribute("data-user");
+
+  console.log("Friends modal action:", action, username);
+
+  try {
+    if (action === "view") {
+      openUserProfile(username);
+      return;
+    }
+
+    if (action === "accept") {
+      // incoming request: from = requester (username), to = me (pubUsername)
+      const res = await fetch("/api/friend/accept", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from: username, to: pubUsername })
+      });
+      const j = await res.json().catch(() => ({}));
+      showTemporaryNotification(j.message || `Accepted ${username}`);
+      loadFriendsUI();
+      return;
+    }
+
+    if (action === "decline") {
+      const res = await fetch("/api/friend/decline", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from: username, to: pubUsername })
+      });
+      const j = await res.json().catch(() => ({}));
+      showTemporaryNotification(j.message || `Declined ${username}`);
+      loadFriendsUI();
+      return;
+    }
+
+    if (action === "cancel") {
+      // cancel a request I sent: from = me, to = username
+      const res = await fetch("/api/friend/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from: pubUsername, to: username })
+      });
+      const j = await res.json().catch(() => ({}));
+      showTemporaryNotification(j.message || `Cancelled request to ${username}`);
+      loadFriendsUI();
+      return;
+    }
+
+    if (action === "unfriend") {
+      // remove friend (unfriend)
+      const res = await fetch("/api/friend/remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ a: pubUsername, b: username })
+      });
+      const j = await res.json().catch(() => ({}));
+      showTemporaryNotification(j.message || `Removed ${username}`);
+      loadFriendsUI();
+      return;
+    }
+
+    // fallback: if there is a button with only data-user (no data-action), treat as view
+    if (!action && username) {
+      openUserProfile(username);
+    }
+  } catch (err) {
+    console.error("Friends action failed:", err);
+    showTemporaryNotification("Action failed");
+  }
+};
+
+friendsModalBody.addEventListener("click", friendsModalBody._friendsHandler);
+
+
+
 

@@ -9,8 +9,11 @@ const state = {
   history: [],
   songIndex: -1,
   ManualQueue: 0,
-  friends: {},
-  shareLoc: null
+  friends: [],
+  friendRequestsSent: [],
+  friendRequestsReceived: [],
+  shareLoc: null,
+  intList: null
 };
 
 export default state;

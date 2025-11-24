@@ -78,7 +78,7 @@ export function populatePlaylistsUI() {
 
   container.innerHTML = "";
   optContainer.innerHTML = `
-    <button id="createPlaylistBtn" class="menu-item">Create New Playlist</button>
+    <button id="createPlaylistBtn" class="menu-item">New</button>
   `;
 
   bindCreatePlaylistBtn();

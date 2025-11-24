@@ -309,6 +309,88 @@
   min-width: 120px; /* Longer progress bar */
 }
 
+/* Player actions area */
+.player-actions {
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+.player-add-btn {
+  background: rgba(233, 69, 96, 0.7);
+  border: 1px solid rgba(233, 69, 96, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-family: 'Inter', sans-serif;
+}
+
+.player-add-btn:hover {
+  background: rgba(233, 69, 96, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+}
+
+/* Update player controls row to accommodate new button */
+#floating-player.mini-player .player-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+  order: 2;
+}
+
+/* Adjust dropdown positioning for player context */
+#floating-player.mini-player .dropdown {
+  position: relative;
+}
+
+#floating-player.mini-player .dropdown-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  min-width: 160px;
+  z-index: 1001;
+}
+
+/* Hide the top bar since we moved the button */
+#top-bar {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .player-add-btn {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+  
+  #floating-player.mini-player .player-controls-row {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack layout for very small screens */
+  #floating-player.mini-player .player-controls-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .player-actions {
+    order: -1;
+    margin: 0;
+  }
+}
+
 /* For mobile - adjust spacing */
 @media (max-width: 768px) {
   #floating-player.mini-player .player-controls-row {

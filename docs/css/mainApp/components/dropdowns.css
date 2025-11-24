@@ -3,23 +3,42 @@
 .dropdown{position:relative;}
 
 .dropdown-menu{
-  position:absolute; 
-  top:100%; 
-  left:0; 
-  margin-top:8px;
-  min-width:200px; 
-  background:rgba(30,30,50,.95);
-  backdrop-filter:blur(12px); 
-  border:1px solid rgba(100,200,255,.2);
-  border-radius:var(--radius-sm); 
-  padding:8px;
-  display:none; 
-  flex-direction:column; 
-  z-index:1000;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  position: absolute; 
+  bottom: 100%; 
+  left: 0; 
+  margin-bottom: 8px;
+  min-width: 200px; 
+  background: rgba(30,30,50,.95);
+  backdrop-filter: blur(12px); 
+  border: 1px solid rgba(100,200,255,.2);
+  border-radius: var(--radius-sm); 
+  padding: 8px;
+  display: none; 
+  flex-direction: column; 
+  z-index: 1001; /* Increased to be above player */
+  box-shadow: 0 -8px 30px rgba(0,0,0,.4);
 }
 
-.dropdown.active .dropdown-menu{display:flex;}
+.dropdown.active .dropdown-menu {
+  display: flex;
+}
+
+/* Ensure the player has proper stacking context */
+#floating-player.mini-player {
+  position: fixed;
+  z-index: 1000; /* Player stays at 1000 */
+  /* ... rest of your player styles */
+}
+
+/* If it's still getting cut off, add overflow visible */
+#floating-player.mini-player {
+  overflow: visible !important;
+}
+
+#floating-player.mini-player .dropdown {
+  position: relative;
+  overflow: visible;
+}
 
 .menu-item{
   background:none; 

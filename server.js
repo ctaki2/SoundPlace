@@ -53,8 +53,11 @@ app.post("/api/register", (req, res) => {
     queueIndex: -1,
     manualQueue: 0,
     history: [],
-    friends: {},
-    shareLoc: true
+    friends: [],
+    friendRequestsSent: [],
+    friendRequestsReceived: [],
+    shareLoc: true,
+    intList: false
   };
 
   saveUsers(users);
@@ -125,6 +128,10 @@ app.post("/api/updateUser", (req, res) => {
     users[username].shareLoc = updates.shareLoc
   }
 
+  if (updates.intList !== undefined) {
+    users[username].intList = updates.intList
+  }
+
   saveUsers(users);
   res.json({ success: true, message: "User data saved" });
 });
@@ -167,6 +174,118 @@ app.get("/api/searchUsers", (req, res) => {
 });
 
 
+// ---- List friend state for a user ----
+app.get("/api/friend/list/:user", (req, res) => {
+    const users = loadUsers();
+    const u = users[req.params.user];
+
+    if (!u) return res.json({ success: false, message: "User not found" });
+
+    res.json({
+        success: true,
+        friends: u.friends || [],
+        requestsSent: u.friendRequestsSent || [],
+        requestsReceived: u.friendRequestsReceived || []
+    });
+});
+
+// ---- Send friend request ----
+app.post("/api/friend/send", (req, res) => {
+    const { from, to } = req.body;
+    const users = loadUsers();
+
+    if (!users[from] || !users[to])
+        return res.json({ success: false });
+
+    if (users[from].friends.includes(to))
+        return res.json({ success: false, message: "Already friends" });
+
+    if (!users[from].friendRequestsSent.includes(to))
+        users[from].friendRequestsSent.push(to);
+
+    if (!users[to].friendRequestsReceived.includes(from))
+        users[to].friendRequestsReceived.push(from);
+
+    saveUsers(users);
+    res.json({ success: true });
+});
+
+// ---- Cancel friend request ----
+app.post("/api/friend/cancel", (req, res) => {
+    const { from, to } = req.body;
+    const users = loadUsers();
+
+    if (!users[from] || !users[to])
+        return res.json({ success: false });
+
+    users[from].friendRequestsSent =
+        users[from].friendRequestsSent.filter(u => u !== to);
+
+    users[to].friendRequestsReceived =
+        users[to].friendRequestsReceived.filter(u => u !== from);
+
+    saveUsers(users);
+    res.json({ success: true });
+});
+
+// ---- Decline friend request ----
+app.post("/api/friend/decline", (req, res) => {
+    const { from, to } = req.body;
+    const users = loadUsers();
+
+    if (!users[from] || !users[to])
+        return res.json({ success: false });
+
+    users[from].friendRequestsSent =
+        users[from].friendRequestsSent.filter(u => u !== to);
+
+    users[to].friendRequestsReceived =
+        users[to].friendRequestsReceived.filter(u => u !== from);
+
+    saveUsers(users);
+    res.json({ success: true });
+});
+
+// ---- Accept friend request ----
+app.post("/api/friend/accept", (req, res) => {
+    const { from, to } = req.body; // from = sender, to = accepter
+    const users = loadUsers();
+
+    if (!users[from] || !users[to])
+        return res.json({ success: false });
+
+    // Remove pending request
+    users[from].friendRequestsSent =
+        users[from].friendRequestsSent.filter(u => u !== to);
+
+    users[to].friendRequestsReceived =
+        users[to].friendRequestsReceived.filter(u => u !== from);
+
+    // Add each other as friends
+    if (!users[from].friends.includes(to))
+        users[from].friends.push(to);
+
+    if (!users[to].friends.includes(from))
+        users[to].friends.push(from);
+
+    saveUsers(users);
+    res.json({ success: true });
+});
+
+// ---- Remove friend ----
+app.post("/api/friend/remove", (req, res) => {
+    const { a, b } = req.body;
+    const users = loadUsers();
+
+    if (!users[a] || !users[b])
+        return res.json({ success: false });
+
+    users[a].friends = users[a].friends.filter(u => u !== b);
+    users[b].friends = users[b].friends.filter(u => u !== a);
+
+    saveUsers(users);
+    res.json({ success: true });
+});
 
 io.on("connection", (socket) => {
   console.log("🟢 Client connected:", socket.id);
