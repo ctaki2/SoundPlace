@@ -32,9 +32,7 @@
         "timestamp": 1763962012999
       }
     ],
-    "friends": [
-      "Matt"
-    ],
+    "friends": [],
     "friendRequestsSent": [
       "Jane"
     ],
@@ -74,23 +72,21 @@
     "shareLoc": true,
     "intList": false
   },
-  "Matt": {
-    "password": "Opojfe",
+  "Sp": {
+    "password": "rpo",
     "playlists": {},
     "queue": [],
     "queueIndex": -1,
     "manualQueue": 0,
     "history": [],
-    "friends": [
-      "John"
-    ],
+    "friends": [],
     "friendRequestsSent": [],
     "friendRequestsReceived": [],
     "shareLoc": true,
     "intList": false
   },
-  "Sp": {
-    "password": "rpo",
+  "FQ": {
+    "password": "12",
     "playlists": {},
     "queue": [],
     "queueIndex": -1,

@@ -73,5 +73,26 @@ export function initSettings() {
             });
     });
 
+    const deleteBtn = document.querySelector("#section-account .danger-btn:last-child");
+
+    deleteBtn.addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to permanently delete your account? This cannot be undone.")) return;
+
+        fetch("/api/account/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: pubUsername })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("Account deleted");
+                window.location.href = "/index.html";
+            } else {
+                alert("Delete failed: " + data.message);
+            }
+        });
+    });
+
 }
 

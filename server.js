@@ -287,6 +287,36 @@ app.post("/api/friend/remove", (req, res) => {
     res.json({ success: true });
 });
 
+// ---- Delete Account ----
+app.post("/api/account/delete", (req, res) => {
+    const { username } = req.body;
+    if (!username) {
+        return res.json({ success: false, message: "Missing username" });
+    }
+
+    const users = loadUsers();
+
+    if (!users[username]) {
+        return res.json({ success: false, message: "User not found" });
+    }
+
+    // Remove the user entirely
+    delete users[username];
+
+    // Clean up friend lists + requests in all remaining users
+    for (const u of Object.keys(users)) {
+        users[u].friends = users[u].friends.filter(f => f !== username);
+        users[u].friendRequestsSent = users[u].friendRequestsSent.filter(f => f !== username);
+        users[u].friendRequestsReceived = users[u].friendRequestsReceived.filter(f => f !== username);
+    }
+
+    saveUsers(users);
+
+    res.json({ success: true, message: "Account deleted" });
+});
+
+
+
 io.on("connection", (socket) => {
   console.log("🟢 Client connected:", socket.id);
   socket.emit("pins", pins); 

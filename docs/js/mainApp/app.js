@@ -68,44 +68,6 @@ const modalOverlay = document.getElementById("modalOverlay"); const closeButtons
 
 
 
-// // SETTINGS MODAL CONTROLS
-// const settingsModal = document.getElementById("settingsModal");
-// const settingsTabs = document.querySelectorAll(".settings-tab");
-// const settingsSections = document.querySelectorAll(".settings-section");
-// document.getElementById("settings-username").innerText = pubUsername
-
-// // open/close button (you add your own trigger)
-// document.getElementById("openSettingsBtn")?.addEventListener("click", () => {
-//     openModal(settingsModal);
-// });
-
-// // tab switching
-// settingsTabs.forEach(tab => {
-//     tab.addEventListener("click", () => {
-//         // remove active from all tabs
-//         settingsTabs.forEach(t => t.classList.remove("active"));
-//         tab.classList.add("active");
-
-//         const target = tab.dataset.section;
-
-//         settingsSections.forEach(section => {
-//             section.classList.toggle("hidden", section.id !== `section-${target}`);
-//         });
-//     });
-// });
-
-
-// const intListBtn = document.getElementById("intListBtn")
-
-// intListBtn.onclick = () => {
-//   state.intList = !state.intList;
-
-//   saveIntList()
-
-//   prevBtn.style.display = !state.intList ? "block" : "none";
-//   nextBtn.style.display = !state.intList ? "block" : "none";
-// }
-
 // MODAL CONTROLS
 export function openModal(modal) {
   closeAllModals();
