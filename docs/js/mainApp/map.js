@@ -58,7 +58,16 @@ export function initMap({ onPlay, onQueue, socket }) {
         startLocationSharing();
     }
 
-    socket.on("pins", pins => renderPins(pins, onPlay, onQueue));
+        // Try to load pins from server immediately (HTTP) in case socket doesn't emit
+        fetch('/api/pins')
+            .then(res => res.json())
+            .then(pins => {
+                if (Array.isArray(pins)) renderPins(pins, onPlay, onQueue);
+            })
+            .catch(() => {});
+
+        // Also listen for realtime pin updates over socket
+        socket.on("pins", pins => renderPins(pins, onPlay, onQueue));
 }
 
 // ---------------------------------------------------------------

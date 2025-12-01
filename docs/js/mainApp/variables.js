@@ -13,7 +13,9 @@ const state = {
   friendRequestsSent: [],
   friendRequestsReceived: [],
   shareLoc: null,
-  intList: null
+  intList: null,
+  // volume stored as 0-100 for easy UI handling
+  volume: 80
 };
 
 export default state;

@@ -92,17 +92,9 @@ app.post("/api/updateUser", (req, res) => {
     users[username].queue = updates.queue;
   }
 
-  // Merge playlists
+  // Replace playlists if provided (client is authoritative)
   if (updates.playlists) {
-    users[username].playlists = users[username].playlists || {};
-    for (const [name, songs] of Object.entries(updates.playlists)) {
-      if (!users[username].playlists[name]) users[username].playlists[name] = [];
-      songs.forEach(s => {
-        if (!users[username].playlists[name].find(x => x.url === s.url)) {
-          users[username].playlists[name].push(s);
-        }
-      });
-    }
+    users[username].playlists = updates.playlists;
   }
 
   // Merge queueIndex
@@ -130,6 +122,11 @@ app.post("/api/updateUser", (req, res) => {
 
   if (updates.intList !== undefined) {
     users[username].intList = updates.intList
+  }
+
+  if (updates.volume !== undefined) {
+    // store volume as numeric 0-100
+    users[username].volume = Number(updates.volume);
   }
 
   saveUsers(users);

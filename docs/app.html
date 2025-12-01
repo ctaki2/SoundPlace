@@ -131,6 +131,11 @@
             <div class="info-value" id="settings-username-display">Username</div>
           </div>
         </div>
+
+        <div class="profile-playlists-section" style="margin-top:12px">
+          <h3 class="profile-section-title">Top Songs (You)</h3>
+          <div id="settingsTopSongsList"></div>
+        </div>
       </div>
 
       <!-- PERMISSIONS -->
@@ -207,6 +212,21 @@
           </div>
         </div>
         
+        
+        
+        <div class="controls-list" style="margin-top:16px">
+          <div class="control-item">
+            <div class="control-info">
+              <span class="control-title">Volume</span>
+              <span class="control-desc">Set the default playback volume for your account</span>
+            </div>
+            <div style="min-width:160px; display:flex; align-items:center; gap:8px;">
+              <input type="range" id="volumeSlider" min="0" max="100" step="1" value="80" aria-label="Volume slider">
+              <span id="volumeValue" style="width:36px; text-align:center; color:var(--accent);">80</span>
+            </div>
+          </div>
+        </div>
+
         <div class="info-note">
           <span class="info-icon">ⓘ</span>
           SoundPlace uses your location to personalize your listening experience and queue songs nearby.
@@ -253,7 +273,10 @@
 <div class="modal" id="queueModal">
   <div class="modal-header">
     <h2 class="modal-title">Current Queue</h2>
-    <button class="modal-close">&times;</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button id="clearQueueBtn" class="nav-btn" title="Clear queue">Clear</button>
+      <button class="modal-close">&times;</button>
+    </div>
   </div>
   <div class="modal-body" id="queueModalBody">
   </div>
@@ -309,19 +332,21 @@
   </div>
 
   <div class="modal-body" id="userProfileBody">
-      <div class="profile-section">
-          <img id="profileAvatar" class="profile-avatar" src="/images/default-avatar.jpg">
+        <!-- profile avatar intentionally removed per request -->
+
+        <!-- profile-info removed: counts and status intentionally hidden per UX request -->
+
+      <div id="profilePlaylistsSection" class="profile-playlists-section">
+          <h3 class="profile-section-title">Playlists</h3>
+          <div id="profilePlaylistsList"></div>
       </div>
 
-      <div class="profile-info">
-          <p><strong>Username:</strong> <span id="profileName"></span></p>
-          <p><strong>Total Songs Played:</strong> <span id="profileHistoryCount">0</span></p>
-          <p><strong>Playlists:</strong> <span id="profilePlaylistCount">0</span></p>
-      </div>
+        <div id="profileTopSongsSection" class="profile-playlists-section">
+          <h3 class="profile-section-title">Top Songs</h3>
+          <div id="profileTopSongsList"></div>
+        </div>
 
       <div class="profile-actions">
-          <button id="profileViewHistoryBtn" class="nav-btn">View History</button>
-          <button id="profileViewPlaylistsBtn" class="nav-btn">View Playlists</button>
       </div>
   </div>
 </div>

@@ -1,12 +1,142 @@
 {
-  "John": {
-    "password": "Password123",
+  "a": {
+    "password": "1",
     "playlists": {
-      "Favorites": [
+      "af": [
         {
-          "url": " https://oleafkuh.github.io/soundplace-tracks/Bryan%20Mathys%20-%20Wild%20Heart.mp3",
-          "title": " Wild Heart",
-          "artist": "Bryan Mathys"
+          "url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3",
+          "title": "Dollarz",
+          "artist": "MOHMOHRAP"
+        },
+        {
+          "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+          "title": " space​.​.​.​dude (ietsje anders)",
+          "artist": "Richard Jonas"
+        },
+        {
+          "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
+          "title": " Chinatown",
+          "artist": "VADE"
+        }
+      ]
+    },
+    "queue": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+        "title": " space​.​.​.​dude (ietsje anders)",
+        "artist": "Richard Jonas"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
+        "title": " New Soul",
+        "artist": "New Soul"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
+        "title": " Chinatown",
+        "artist": "VADE"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vaniish%20-%20Observatory%20Time.mp3",
+        "title": " Observatory Time",
+        "artist": "Vaniish"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3",
+        "title": " Lighters Out",
+        "artist": "Measles Mumps Rubella"
+      }
+    ],
+    "queueIndex": 4,
+    "manualQueue": 5,
+    "history": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764614963885
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
+        "title": " Chinatown",
+        "artist": "VADE",
+        "timestamp": 1764614979338
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764615065038
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764615858244
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Broke%20For%20Free%20-%20Calm%20The%20Fuck%20Down.mp3",
+        "title": " Calm The F*** Down",
+        "artist": "Broke For Free",
+        "timestamp": 1764615875197
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3",
+        "title": " Lighters Out",
+        "artist": "Measles Mumps Rubella",
+        "timestamp": 1764615887602
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3",
+        "title": "Dollarz",
+        "artist": "MOHMOHRAP",
+        "timestamp": 1764615934727
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3",
+        "title": " Lighters Out",
+        "artist": "Measles Mumps Rubella",
+        "timestamp": 1764616811182
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
+        "title": " Chinatown",
+        "artist": "VADE",
+        "timestamp": 1764619387271
+      }
+    ],
+    "friends": [
+      "b"
+    ],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false,
+    "volume": 0
+  },
+  "b": {
+    "password": "1",
+    "playlists": {},
+    "queue": [],
+    "queueIndex": -1,
+    "manualQueue": 0,
+    "history": [],
+    "friends": [
+      "a"
+    ],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false
+  },
+  "c": {
+    "password": "1",
+    "playlists": {
+      "eg2e": [
+        {
+          "url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3",
+          "title": "To Come Home",
+          "artist": "kesta"
         }
       ]
     },
@@ -17,85 +147,104 @@
         "artist": "Monolog Rockstars"
       },
       {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/GeoGenLabel%20-%20%D0%A6%D0%B0%D1%80%D1%8C%20%D0%9F%D1%8B%D0%BB%D0%B8%20_%20The%20King%20of%20Dust%20ver1.0.mp3",
-        "title": " Царь Пыли / The King of Dust ver1.0",
-        "artist": "GeoGenLabel"
+        "url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3",
+        "title": "Dollarz",
+        "artist": "MOHMOHRAP"
       }
     ],
-    "queueIndex": -1,
+    "queueIndex": 0,
     "manualQueue": 2,
     "history": [
       {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/Doug%20Gillard%20-%20Peachy%20Gray.mp3",
-        "title": " Peachy Gray",
-        "artist": "Doug Gillard",
-        "timestamp": 1763962012999
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Hogan%20Grip%20-%20Stance%20Gives%20You%20Balance.mp3",
+        "title": " Stance Gives You Balance",
+        "artist": "Hogan Grip",
+        "timestamp": 1764619569297
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764619581501
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/BOYTOY%20-%20Pulp.mp3",
+        "title": " Pulp",
+        "artist": "BOYTOY",
+        "timestamp": 1764619752494
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
+        "title": " Chinatown",
+        "artist": "VADE",
+        "timestamp": 1764619793493
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3",
+        "title": "To Come Home",
+        "artist": "kesta",
+        "timestamp": 1764619821023
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764619977768
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764621139701
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764621225321
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+        "title": " space​.​.​.​dude (ietsje anders)",
+        "artist": "Richard Jonas",
+        "timestamp": 1764621249758
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764621331101
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764621433005
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764621472661
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus",
+        "timestamp": 1764621495333
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3",
+        "title": "To Come Home",
+        "artist": "kesta",
+        "timestamp": 1764621529893
       }
     ],
     "friends": [],
-    "friendRequestsSent": [
-      "Jane"
-    ],
-    "friendRequestsReceived": [
-      "Mike"
-    ],
-    "shareLoc": true,
-    "intList": false
-  },
-  "Jane": {
-    "password": "NewPasswords",
-    "playlists": {},
-    "queue": [],
-    "queueIndex": -1,
-    "manualQueue": 0,
-    "history": [],
-    "friends": [],
-    "friendRequestsSent": [],
-    "friendRequestsReceived": [
-      "John"
-    ],
-    "shareLoc": true,
-    "intList": false
-  },
-  "Mike": {
-    "password": "PAsscode",
-    "playlists": {},
-    "queue": [],
-    "queueIndex": -1,
-    "manualQueue": 0,
-    "history": [],
-    "friends": [],
-    "friendRequestsSent": [
-      "John"
-    ],
-    "friendRequestsReceived": [],
-    "shareLoc": true,
-    "intList": false
-  },
-  "Sp": {
-    "password": "rpo",
-    "playlists": {},
-    "queue": [],
-    "queueIndex": -1,
-    "manualQueue": 0,
-    "history": [],
-    "friends": [],
     "friendRequestsSent": [],
     "friendRequestsReceived": [],
-    "shareLoc": true,
-    "intList": false
-  },
-  "FQ": {
-    "password": "12",
-    "playlists": {},
-    "queue": [],
-    "queueIndex": -1,
-    "manualQueue": 0,
-    "history": [],
-    "friends": [],
-    "friendRequestsSent": [],
-    "friendRequestsReceived": [],
-    "shareLoc": true,
-    "intList": false
+    "shareLoc": false,
+    "intList": false,
+    "volume": 0
   }
 }

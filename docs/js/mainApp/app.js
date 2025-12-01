@@ -5,7 +5,7 @@ import {saveQueue, saveManualQueue, updateQueueIndex, saveHistory, saveIntList} 
 import state, {pubUsername} from './variables.js'
 import {setCurrentSongRef, populateQueueUI, populateHistoryUI, populatePlaylistsUI} from "./ui.js";
 import {initMap} from "./map.js";
-import { initSettings } from "./settings.js";
+import { initSettings, renderProfileStats } from "./settings.js";
 
 const socket = io();
 let userData = null;
@@ -22,7 +22,13 @@ fetch(`/api/getUser/${pubUsername}`)
       state.history = userData.history || [];
       state.ManualQueue = userData.manualQueue || 0;
       state.shareLoc = userData.shareLoc
-      state.intList = userData.intList
+        state.intList = userData.intList
+        // load user volume (0-100) - coerce and preserve 0
+        if (userData.volume !== undefined && userData.volume !== null) {
+          state.volume = Number(userData.volume);
+        } else {
+          state.volume = (state.volume !== undefined && state.volume !== null) ? state.volume : 80;
+        }
       console.log("User loaded:", userData);
     } else {
       console.warn("User load failed:", data.message);
@@ -37,10 +43,28 @@ fetch(`/api/getUser/${pubUsername}`)
     document.getElementById("prevBtn").style.display = !state.intList ? "block" : "none";
     document.getElementById("nextBtn").style.display = !state.intList ? "block" : "none";
 
+    // apply persisted volume (0-100 -> 0-1)
+    try {
+      audioPlayer.volume = (typeof state.volume === 'number') ? (state.volume / 100) : 0.8;
+    } catch (e) { }
+
+    // update settings UI slider if present (in case initSettings ran earlier)
+    try {
+      const vs = document.getElementById('volumeSlider');
+      const vv = document.getElementById('volumeValue');
+      if (vs) {
+        vs.value = (typeof state.volume === 'number') ? String(state.volume) : '80';
+        if (vv) vv.textContent = vs.value;
+      }
+    } catch (e) {}
+
 
     populateHistoryUI();
     populateQueueUI();
     populatePlaylistsUI();   
+
+    // update settings/profile stats UI now that history is loaded
+    try { renderProfileStats(); } catch (e) {}
 
     initMap({
         onPlay: playSong,
@@ -55,6 +79,8 @@ fetch(`/api/getUser/${pubUsername}`)
 
   
 export const audioPlayer = new Audio()
+// expose for other modules (settings) to adjust volume without circular import
+window.audioPlayer = audioPlayer;
 const songInfo = document.getElementById("songInfo");
 const playBtn = document.getElementById("playBtn"); const prevBtn = document.getElementById("prevBtn"); const nextBtn = document.getElementById("nextBtn");
 const showQueueBtn = document.getElementById("showQueueBtn"); const showPlaylistBtnRight = document.getElementById("showPlaylistBtnRight"); const playlistBtn = document.getElementById("playlistBtn"); 
@@ -233,6 +259,7 @@ audioPlayer.addEventListener("timeupdate", () => {
     state.history.push(entry);
     saveHistory([entry]);
     populateHistoryUI();
+    try { renderProfileStats(); } catch (e) {}
   }
 
   seekSlider.value = currentTime;
@@ -266,21 +293,28 @@ searchInput.addEventListener("input", function () {
                 dropdown.innerHTML = "";
 
                 if (data.users.length === 0) {
-                    dropdown.innerHTML = `<div>No users found</div>`;
+                    dropdown.innerHTML = `<div class="search-empty">No users found</div>`;
                     dropdown.classList.remove("hidden");
                     return;
                 }
 
                 data.users.forEach(user => {
                     const item = document.createElement("div");
-                    item.textContent = user.username;
+                    item.className = "search-result-item";
+                    
+                    // Use the proper HTML structure with CSS classes
+                    item.innerHTML = `
+                        <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                        <div class="user-info">
+                            <div class="user-name">${user.username}</div>
+                        </div>
+                    `;
 
                     item.onclick = () => {
                         dropdown.classList.add("hidden");
                         dropdown.innerHTML = "";
                         openUserProfile(user.username);
                     };
-
 
                     dropdown.appendChild(item);
                 });
@@ -290,6 +324,43 @@ searchInput.addEventListener("input", function () {
     }, 250);
 });
 
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    if (!searchInput.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add("hidden");
+    }
+});
+
+// Optional: Add keyboard navigation
+searchInput.addEventListener('keydown', function(event) {
+    const items = dropdown.querySelectorAll('.search-result-item');
+    const activeItem = dropdown.querySelector('.search-result-item.active');
+    
+    if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (!activeItem) {
+            items[0]?.classList.add('active');
+        } else {
+            const next = activeItem.nextElementSibling;
+            if (next) {
+                activeItem.classList.remove('active');
+                next.classList.add('active');
+            }
+        }
+    } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (activeItem) {
+            const prev = activeItem.previousElementSibling;
+            if (prev) {
+                activeItem.classList.remove('active');
+                prev.classList.add('active');
+            }
+        }
+    } else if (event.key === 'Enter' && activeItem) {
+        event.preventDefault();
+        activeItem.click();
+    }
+});
 // Clicking outside hides dropdown
 document.addEventListener("click", (e) => {
     if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
@@ -308,17 +379,80 @@ function openUserProfile(username) {
 
         // Fill modal basic info
         document.getElementById("profileUsername").innerText = `${username}'s Profile`;
-        document.getElementById("profileName").innerText = username;
-        document.getElementById("profileHistoryCount").innerText = user.history?.length || 0;
-        document.getElementById("profilePlaylistCount").innerText = Object.keys(user.playlists || {}).length;
-        document.getElementById("profileAvatar").src = user.avatar || "/images/default-avatar.jpg";
+        
+        const playlists = user.playlists || {};
+        // profileAvatar element removed from modal; no avatar displayed
 
-        // Fetch current viewer's friend state (pubUsername)
+        // Populate playlists
+        const playlistsList = document.getElementById("profilePlaylistsList");
+        playlistsList.innerHTML = "";
+        
+        if (Object.keys(playlists).length === 0) {
+          playlistsList.innerHTML = '<p class="empty-state">No playlists yet</p>';
+        } else {
+          Object.keys(playlists).forEach(playlistName => {
+            const playlistSongs = playlists[playlistName] || [];
+            const playlistDiv = document.createElement("div");
+            playlistDiv.className = "profile-playlist-item";
+            playlistDiv.innerHTML = `
+              <div class="playlist-header">
+                <span class="playlist-name">${playlistName}</span>
+                <span class="playlist-count">${playlistSongs.length} ${playlistSongs.length === 1 ? 'song' : 'songs'}</span>
+              </div>
+              <div class="playlist-songs">
+                ${playlistSongs.slice(0, 3).map((song, idx) => `
+                  <div class="playlist-song">
+                    <span class="song-title">${song.title || 'Unknown'}</span>
+                    <span class="song-artist">${song.artist || 'Unknown Artist'}</span>
+                  </div>
+                `).join('')}
+                ${playlistSongs.length > 3 ? `<div class="playlist-more">+${playlistSongs.length - 3} more</div>` : ''}
+              </div>
+            `;
+            playlistsList.appendChild(playlistDiv);
+          });
+        }
+
+          // Populate top songs (computed from history)
+          const topSongsList = document.getElementById("profileTopSongsList");
+          topSongsList.innerHTML = "";
+
+          const historyArr = user.history || [];
+          if (historyArr.length === 0) {
+            topSongsList.innerHTML = '<p class="empty-state">No history yet</p>';
+          } else {
+            // count plays by URL
+            const counts = {};
+            historyArr.forEach(entry => {
+              const key = entry.url || `${entry.artist}::${entry.title}`;
+              if (!counts[key]) counts[key] = { url: entry.url, title: entry.title || 'Unknown', artist: entry.artist || 'Unknown', count: 0 };
+              counts[key].count++;
+            });
+
+            const top = Object.values(counts).sort((a,b) => b.count - a.count).slice(0,5);
+
+            top.forEach((s, idx) => {
+              const item = document.createElement('div');
+              item.className = 'profile-playlist-item top-song-item';
+              item.innerHTML = `
+                <div class="top-song-compact">
+                  <span class="top-song-pos">${idx+1}.</span>
+                  <span class="top-song-title">${s.title}</span>
+                  <span class="top-song-artist">— ${s.artist}</span>
+                </div>
+              `;
+              topSongsList.appendChild(item);
+            });
+          }
+
+        // Fetch friend data for friends count and determine relationship status
         const viewerRes = await fetch(`/api/friend/list/${pubUsername}`);
         const viewerData = await viewerRes.json();
         const viewerFriends = (viewerData.success && viewerData.friends) ? viewerData.friends : [];
         const viewerSent = (viewerData.success && viewerData.requestsSent) ? viewerData.requestsSent : [];
         const viewerReceived = (viewerData.success && viewerData.requestsReceived) ? viewerData.requestsReceived : [];
+
+        // (profile friend count display removed per UI change)
 
         // Determine relationship status
         const isFriend = viewerFriends.includes(username);
@@ -347,6 +481,7 @@ function openUserProfile(username) {
         profileBody.appendChild(actionsDiv);
 
         if (username === pubUsername) {
+          document.getElementById("profileUsername").innerText = 'Your Profile'
           // viewing self: show nothing (or settings)
           actionsDiv.appendChild(makeBtn("profileEditBtn", "Edit Profile", () => { openModal(settingsModal); }));
         } else if (isFriend) {

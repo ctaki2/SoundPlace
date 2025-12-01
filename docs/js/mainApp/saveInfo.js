@@ -4,29 +4,12 @@ import state, { pubUsername } from './variables.js';
 
 export async function savePlaylists() {
   try {
-    const res = await fetch(`/api/getUser/${pubUsername}`);
-    const data = await res.json();
-    if (!data.success) return;
-
-    const serverPlaylists = data.data.playlists || {};
-    const mergedPlaylists = { ...serverPlaylists };
-
-    for (const [name, songs] of Object.entries(state.playlists)) {
-      if (!mergedPlaylists[name]) mergedPlaylists[name] = [];
-      songs.forEach(s => {
-        if (!mergedPlaylists[name].find(x => x.url === s.url)) {
-          mergedPlaylists[name].push(s);
-        }
-      });
-    }
-
+    // Send the client-side playlists as authoritative — replace server copy
     await fetch("/api/updateUser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: pubUsername, updates: { playlists: mergedPlaylists } })
+      body: JSON.stringify({ username: pubUsername, updates: { playlists: state.playlists } })
     });
-
-    state.playlists = mergedPlaylists; // update local playlists
   } catch (err) {
     console.error(err);
   }
@@ -110,4 +93,16 @@ export async function saveIntList() {
     console.error(err);
   }
 
+}
+
+export async function saveVolume() {
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { volume: Number(state.volume) } })
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }

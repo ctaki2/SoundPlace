@@ -1,7 +1,7 @@
 // ui.js
 
 import state from "./variables.js";
-import { savePlaylists, updateQueueIndex } from "./saveInfo.js";
+import { savePlaylists, updateQueueIndex, saveQueue, saveManualQueue } from "./saveInfo.js";
 import { showTemporaryNotification } from "./helper.js";
 import { playSong } from "./app.js"; 
 
@@ -40,6 +40,24 @@ export function populateQueueUI() {
     });
 
     queueModalBody.appendChild(el);
+  });
+}
+
+// bind clear queue button
+const clearQueueBtn = document.getElementById('clearQueueBtn');
+if (clearQueueBtn) {
+  clearQueueBtn.addEventListener('click', () => {
+    if (!confirm('Clear the entire queue?')) return;
+    state.songQueue = [];
+    state.songIndex = -1;
+    // reset manual queue counter when user clears the queue
+    state.ManualQueue = 0;
+    populateQueueUI();
+    try {
+      saveQueue();
+      saveManualQueue();
+    } catch (e) {}
+    showTemporaryNotification('Queue cleared');
   });
 }
 
@@ -94,38 +112,83 @@ export function populatePlaylistsUI() {
     const dropdown = document.createElement("div");
     dropdown.className = "dropdown";
 
-    const btn = document.createElement("button");
+    // header container — use div to avoid nesting interactive controls
+    const btn = document.createElement("div");
     btn.className = "dropdown-btn";
+    btn.setAttribute('role', 'button');
+    btn.tabIndex = 0;
 
     const btnContent = document.createElement("span");
     btnContent.textContent = name;
 
-    const countBadge = document.createElement("span");
-    countBadge.textContent = "";
+    // create header delete icon (placed left of the title)
+    const headerDelete = document.createElement('button');
+    headerDelete.className = 'playlist-delete-inline';
+    headerDelete.setAttribute('aria-label', `Delete playlist ${name}`);
+    headerDelete.title = 'Delete playlist';
+    headerDelete.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    `;
+    headerDelete.onclick = (ev) => {
+      ev.stopPropagation();
+      if (!confirm(`Delete playlist \"${name}\"? This cannot be undone.`)) return;
+      delete state.playlists[name];
+      populatePlaylistsUI();
+      try { savePlaylists(); } catch (e) {}
+      showTemporaryNotification(`Deleted playlist \"${name}\"`);
+    };
+
+    btn.appendChild(headerDelete);
     btn.appendChild(btnContent);
-    btn.appendChild(countBadge);
 
     const content = document.createElement("div");
     content.className = "dropdown-content";
 
     if (songs.length === 0) {
-      const empty = document.createElement("button");
-      empty.className = "song-btn";
+      const empty = document.createElement("div");
+      empty.className = "modal-empty";
       empty.textContent = "No songs in this playlist";
-      empty.style.color = "rgba(255,255,255,.4)";
-      empty.style.cursor = "default";
       content.appendChild(empty);
     } else {
-      songs.forEach(s => {
+      songs.forEach((s, si) => {
+        const row = document.createElement('div');
+        row.className = 'playlist-song-row';
+
         const sbtn = document.createElement("button");
         sbtn.className = "song-btn";
         sbtn.textContent = `${s.artist} — ${s.title}`;
-        sbtn.onclick = () => {
-          playSong(s.url, s.title, s.artist);
+        sbtn.onclick = () => { playSong(s.url, s.title, s.artist); };
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'song-remove-btn';
+        removeBtn.title = 'Remove from playlist';
+        removeBtn.setAttribute('aria-label', `Remove ${s.title}`);
+        removeBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        `;
+        removeBtn.onclick = (ev) => {
+          ev.stopPropagation();
+          if (!confirm(`Remove "${s.title}" from \"${name}\"?`)) return;
+          const idx = state.playlists[name].findIndex(x => x.url === s.url);
+          if (idx !== -1) state.playlists[name].splice(idx, 1);
+          row.remove();
+          try { savePlaylists(); } catch (e) {}
+          showTemporaryNotification(`Removed from "${name}"`);
         };
-        content.appendChild(sbtn);
+
+        row.appendChild(sbtn);
+        row.appendChild(removeBtn);
+        content.appendChild(row);
       });
     }
+
+    
 
     dropdown.appendChild(btn);
     dropdown.appendChild(content);
@@ -138,15 +201,7 @@ export function populatePlaylistsUI() {
     const optText = document.createElement("span");
     optText.textContent = name;
 
-    const optCount = document.createElement("span");
-    optCount.textContent = songs.length;
-    optCount.style.background = "rgba(255,255,255,.2)";
-    optCount.style.padding = "2px 6px";
-    optCount.style.borderRadius = "8px";
-    optCount.style.fontSize = "0.7em";
-
     optBtn.appendChild(optText);
-    optBtn.appendChild(optCount);
 
     optBtn.onclick = () => {
       if (!currentSongRef) {
@@ -160,20 +215,42 @@ export function populatePlaylistsUI() {
       }
 
       state.playlists[name].push({ ...currentSongRef });
+      // Clear empty state if it exists
+      if (content.querySelector('.modal-empty')) { content.innerHTML = ''; }
 
-      if (content.querySelector('.song-btn[style*="rgba(255,255,255,.4)"]')) {
-        content.innerHTML = "";
-      }
+      // Add new song row to dropdown content (match existing row structure)
+      const newRow = document.createElement('div');
+      newRow.className = 'playlist-song-row';
 
-      const newBtn = document.createElement("button");
-      newBtn.className = "song-btn";
-      newBtn.textContent = `${currentSongRef.artist} — ${currentSongRef.title}`;
-      newBtn.onclick = () => {
-        playSong(currentSongRef.url, currentSongRef.title, currentSongRef.artist);
+      const newSbtn = document.createElement('button');
+      newSbtn.className = 'song-btn';
+      newSbtn.textContent = `${currentSongRef.artist} — ${currentSongRef.title}`;
+      newSbtn.onclick = () => { playSong(currentSongRef.url, currentSongRef.title, currentSongRef.artist); };
+
+      const newRemove = document.createElement('button');
+      newRemove.className = 'song-remove-btn';
+      newRemove.title = 'Remove from playlist';
+      newRemove.setAttribute('aria-label', `Remove ${currentSongRef.title}`);
+      newRemove.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      `;
+      newRemove.onclick = (ev) => {
+        ev.stopPropagation();
+          // place remove icon first so it appears on the left
+          newRow.appendChild(newRemove);
+          newRow.appendChild(newSbtn);
+        if (idx !== -1) state.playlists[name].splice(idx, 1);
+        newRow.remove();
+        try { savePlaylists(); } catch (e) {}
+        showTemporaryNotification(`Removed from "${name}"`);
       };
-      content.appendChild(newBtn);
 
-      optCount.textContent = state.playlists[name].length;
+      newRow.appendChild(newSbtn);
+      newRow.appendChild(newRemove);
+      content.appendChild(newRow);
 
       savePlaylists();
       showTemporaryNotification(`Added to "${name}"`);
@@ -181,11 +258,15 @@ export function populatePlaylistsUI() {
 
     optContainer.appendChild(optBtn);
 
-    btn.onclick = e => {
-      e.stopPropagation();
+    // toggle dropdown on click/keyboard
+    const toggleDropdown = (e) => {
+      if (e) e.stopPropagation();
+      const isActive = dropdown.classList.contains('active');
       container.querySelectorAll(".dropdown").forEach(d => d.classList.remove("active"));
-      dropdown.classList.toggle("active");
+      if (!isActive) dropdown.classList.add('active');
     };
+    btn.addEventListener('click', toggleDropdown);
+    btn.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggleDropdown(ev); } });
   }
 }
 
@@ -194,18 +275,18 @@ export function bindCreatePlaylistBtn() {
   if (!btn) return;
 
   btn.onclick = () => {
-    if (!currentSongRef) {
-      showTemporaryNotification("Play a song first!");
-      return;
-    }
-
     const name = prompt("Playlist name:");
     if (!name) return;
 
-    state.playlists[name] = [currentSongRef];
+    // If there's a current song, add it to the new playlist; otherwise create empty playlist
+    if (currentSongRef) {
+      state.playlists[name] = [ { ...currentSongRef } ];
+    } else {
+      state.playlists[name] = [];
+    }
 
     populatePlaylistsUI();
-    savePlaylists();
+    try { savePlaylists(); } catch (e) {}
 
     showTemporaryNotification(`"${name}" created`);
   };

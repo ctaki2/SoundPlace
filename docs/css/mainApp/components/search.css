@@ -1,0 +1,441 @@
+
+/* -------------------------------------------------
+   USER SEARCH COMPONENT
+   ------------------------------------------------- */
+.search-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    max-width: 90%;
+    margin: 0;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    background: rgba(30, 30, 50, 0.65);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(100, 200, 255, 0.2);
+    border-radius: 22px;
+    padding: 10px 40px 10px 16px;
+    color: #e0f7ff;
+    font-size: var(--font-sm);
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+}
+
+.search-input:focus {
+    background: rgba(40, 40, 60, 0.9);
+    border-color: rgba(233, 69, 96, 0.6);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 0 2px rgba(233, 69, 96, 0.2);
+    transform: translateY(-1px);
+}
+
+.search-icon {
+    position: absolute;
+    right: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-sm);
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.search-input:focus + .search-icon {
+    color: rgba(233, 69, 96, 0.8);
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(30, 30, 50, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(100, 200, 255, 0.2);
+    border-radius: var(--radius-md);
+    margin-top: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(233, 69, 96, 0.1);
+    animation: dropdownAppear 0.3s ease;
+}
+
+/* Search result items */
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px; /* Increased padding */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #e0e0e0;
+    gap: 12px; /* Added gap for better spacing */
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: rgba(100, 200, 255, 0.15);
+    color: #64c8ff;
+    /* transform: translateX(4px); */
+    /* border-radius: var(--radius-sm);  */
+}
+
+.search-result-item.active {
+    background: rgba(233, 69, 96, 0.2);
+    border-left: 3px solid rgba(233, 69, 96, 0.8);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm); /* Rounded corners for active */
+}
+
+
+@keyframes dropdownAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(233, 69, 96, 0.3);
+    border-radius: 3px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb:hover {
+    background: rgba(233, 69, 96, 0.5);
+}
+
+/* Empty state */
+.search-empty {
+    padding: 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    font-size: var(--font-sm);
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Hidden state */
+.hidden {
+    display: none;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e94560, #64c8ff);
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: white;
+}
+
+
+.user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Added gap between name and username */
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: var(--font-sm);
+    margin: 0; /* Remove margin, use gap instead */
+}
+
+.user-username {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    margin: 0; /* Remove margin, use gap instead */
+}
+
+
+/* -------------------------------------------------
+   RESPONSIVE DESIGN
+   ------------------------------------------------- */
+@media (max-width: 768px) {
+    .search-container {
+        max-width: 100%;
+    }
+    
+    .search-input {
+        padding: 10px 44px 10px 14px;
+        font-size: 0.9rem;
+    }
+    
+    .search-result-item {
+        padding: 10px 14px;
+    }
+    
+    .user-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-input {
+        padding: 8px 40px 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .search-dropdown {
+        max-height: 250px;
+    }
+}
+
+#userProfileModal .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid rgba(100, 200, 255, 0.4);
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(100, 200, 255, 0.15);
+    border-radius: 10px;
+}
+
+.profile-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    background: rgba(30, 30, 50, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(100, 200, 255, 0.1);
+    transition: all 0.25s ease;
+}
+
+.profile-stat:hover {
+    background: rgba(100, 200, 255, 0.08);
+    border-color: rgba(100, 200, 255, 0.2);
+}
+
+.profile-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(100, 200, 255, 0.7);
+}
+
+.profile-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #e0f7ff;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.profile-actions .nav-btn {
+    width: 100%;
+}
+
+.profile-playlists-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(100, 200, 255, 0.15);
+}
+
+.profile-section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(100, 200, 255, 0.8);
+    margin-bottom: 12px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#profilePlaylistsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+#profilePlaylistsList::-webkit-scrollbar { width: 5px; }
+#profilePlaylistsList::-webkit-scrollbar-track { background: transparent; }
+#profilePlaylistsList::-webkit-scrollbar-thumb {
+  background: rgba(100, 200, 255, 0.2);
+  border-radius: 3px;
+}
+#profilePlaylistsList::-webkit-scrollbar-thumb:hover { background: rgba(100, 200, 255, 0.4); }
+
+.profile-playlist-item {
+    background: rgba(30, 30, 50, 0.6);
+    border: 1px solid rgba(100, 200, 255, 0.12);
+    border-radius: 8px;
+    padding: 11px 12px;
+    transition: none;
+    cursor: default;
+}
+
+/* Remove hover/click affordances for non-interactive profile items */
+.profile-playlist-item:hover {
+    background: rgba(30, 30, 50, 0.6);
+    border-color: rgba(100, 200, 255, 0.12);
+}
+
+/* Ensure inner song rows don't show pointer cursor */
+.profile-playlist-item .playlist-song,
+.profile-playlist-item .playlist-header,
+.profile-playlist-item .playlist-more {
+    cursor: default;
+}
+
+.playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+}
+
+.playlist-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #e0f7ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.playlist-count {
+    font-size: 0.8rem;
+    color: rgba(100, 200, 255, 0.6);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.playlist-songs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.playlist-song {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 5px;
+    border-left: 2px solid rgba(100, 200, 255, 0.2);
+}
+
+.song-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(224, 247, 255, 0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.song-artist {
+    font-size: 0.75rem;
+    color: rgba(100, 200, 255, 0.5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.playlist-more {
+    font-size: 0.75rem;
+    color: rgba(100, 200, 255, 0.6);
+    font-style: italic;
+    padding: 4px 8px;
+    text-align: center;
+}
+
+/* Compact top-song styles */
+.top-song-item { padding: 8px 10px; }
+.top-song-compact { display:flex; gap:8px; align-items:center; font-size:0.9rem; }
+.top-song-pos { font-weight:700; color: rgba(224,247,255,0.9); }
+.top-song-title { font-weight:600; color: #e0f7ff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.top-song-artist { color: rgba(100,200,255,0.6); font-weight:500; flex-shrink:0; }
+
+.empty-state {
+    text-align: center;
+    padding: 16px 12px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.9rem;
+    font-style: italic;
+}

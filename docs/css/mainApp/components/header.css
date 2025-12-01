@@ -20,8 +20,10 @@
 .header-content {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  position: relative;
+  gap: 20px;
 }
 
 #app-logo {
@@ -34,10 +36,14 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.5px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .header-nav {
   display: flex;
   gap: var(--gap-sm);
   align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
 }
