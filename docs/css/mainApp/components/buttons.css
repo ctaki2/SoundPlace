@@ -48,20 +48,21 @@
 
 #createPlaylistBtn {
   width: 100%;
-  background: linear-gradient(135deg, #64c8ff, #3a9eff);
-  color: white;
+  background: linear-gradient(135deg, #64c8ff, #3a9eff) !important;
+  color: white !important;
   border: none;
   padding: var(--pad-sm);
   border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: var(--gap-md);
+  margin-bottom: 4px;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0 4px 15px rgba(100,200,255,.3);
 }
 
 #createPlaylistBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(100,200,255,.4);
+  background: linear-gradient(135deg, #3a9eff, #2080d0) !important;
+  color: white !important;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(100, 200, 255, 0.25) !important;
 }

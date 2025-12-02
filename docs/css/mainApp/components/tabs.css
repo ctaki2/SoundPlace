@@ -1,0 +1,68 @@
+/* tabs.css - For better tab switching */
+
+/* Tab switching animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-section.active {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Ensure only one section is visible at a time */
+.settings-section:not(.active) {
+  display: none !important;
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Tab active state styling */
+.settings-tab.active {
+  background: linear-gradient(135deg, rgba(66, 153, 225, 0.1), rgba(237, 100, 166, 0.1));
+  border-color: rgba(66, 153, 225, 0.3);
+  color: var(--primary-300);
+  position: relative;
+}
+
+.settings-tab.active::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(180deg, var(--primary-400), var(--accent-400));
+  border-radius: var(--radius-full);
+}
+
+/* Smooth transitions for tab content */
+.settings-content {
+  position: relative;
+}
+
+.settings-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-section.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+}

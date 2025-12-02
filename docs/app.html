@@ -31,6 +31,7 @@
         
         </div>
     </div>
+      
       <!-- <div id="userSearchContainer">
         <input type="text" id="userSearchInput" placeholder="Search users...">
         <div id="userSearchDropdown" class="hidden"></div>
@@ -46,6 +47,9 @@
     </nav>
   </div>
 </header>
+
+<!-- Fixed top-right genre filter (overlay) -->
+ 
 
 <!-- FLOATING GLASS PLAYER -->
 <div id="floating-player" class="mini-player">
@@ -87,13 +91,11 @@
     <div class="settings-sidebar">
       <div class="settings-header">
         <h2 class="settings-title">Settings</h2>
-        <div class="settings-user">
-          <span class="user-name" id="settings-username">Username</span>
-        </div>
+        
       </div>
       <nav class="settings-nav">
         <button class="settings-tab active" data-section="profile">
-          Profile
+          Preferences
         </button>
         <!-- <button class="settings-tab" data-section="permissions">
           Permissions
@@ -112,29 +114,15 @@
       <!-- PROFILE -->
       <div class="settings-section active" id="section-profile">
         <div class="section-header">
-          <h3>Profile Settings</h3>
-          <p>Manage your profile information</p>
-        </div>
-        
-        <!-- <div class="profile-avatar-section">
-          <div class="avatar-container">
-            <img id="settings-avatar" src="/images/default-avatar.jpg" class="settings-avatar">
-            <div class="avatar-overlay">
-              <span class="change-avatar-text">Change</span>
-            </div>
-          </div>
-        </div> -->
-
-        <div class="profile-info">
-          <div class="info-item">
-            <label class="info-label">Username</label>
-            <div class="info-value" id="settings-username-display">Username</div>
-          </div>
+          <h3>Your Preferences</h3>
+          <p>Top songs you've been listening to</p>
         </div>
 
-        <div class="profile-playlists-section" style="margin-top:12px">
-          <h3 class="profile-section-title">Top Songs (You)</h3>
-          <div id="settingsTopSongsList"></div>
+        <div class="stats-grid">
+          <div class="stats-card">
+            <h4 class="stats-title">Top Songs</h4>
+            <div id="settingsTopSongsList" class="top-songs-list"></div>
+          </div>
         </div>
       </div>
 
@@ -184,69 +172,80 @@
       <!-- CONTROLS -->
       <div class="settings-section hidden" id="section-controls">
         <div class="section-header">
-          <h3>Playback Controls</h3>
-          <p>Customize your listening experience</p>
+          <h3>Playback</h3>
+          <p>Configure your listening experience</p>
         </div>
         
-        <div class="controls-list">
-          <div class="control-item">
-            <div class="control-info">
-              <span class="control-title">Share Location</span>
-              <span class="control-desc">Enable location-based features</span>
+        <div class="settings-group">
+          <div class="settings-item">
+            <div class="item-label-group">
+              <h4 class="item-label">Use Location</h4>
+              <p class="item-description">Enable automatic queuing</p>
             </div>
-            <label class="ios-switch">
+            <label class="toggle-switch">
               <input type="checkbox" id="shareLocBtn" checked>
-              <span class="slider"></span>
+              <span class="toggle-slider"></span>
             </label>
           </div>
-          
-          <div class="control-item">
-            <div class="control-info">
-              <span class="control-title">Intentional Listening</span>
-              <span class="control-desc">Prevent skipping songs</span>
+
+          <div class="settings-item">
+            <div class="item-label-group">
+              <h4 class="item-label">Intentional Listening</h4>
+              <p class="item-description">Prevent song skipping on your account</p>
             </div>
-            <label class="ios-switch">
+            <label class="toggle-switch">
               <input type="checkbox" id="intListBtn">
-              <span class="slider"></span>
+              <span class="toggle-slider"></span>
             </label>
           </div>
-        </div>
-        
-        
-        
-        <div class="controls-list" style="margin-top:16px">
-          <div class="control-item">
-            <div class="control-info">
-              <span class="control-title">Volume</span>
-              <span class="control-desc">Set the default playback volume for your account</span>
+
+          <div class="settings-item no-divider">
+            <div class="item-label-group">
+              <h4 class="item-label">Volume</h4>
+              <p class="item-description">Default playback volume</p>
             </div>
-            <div style="min-width:160px; display:flex; align-items:center; gap:8px;">
-              <input type="range" id="volumeSlider" min="0" max="100" step="1" value="80" aria-label="Volume slider">
-              <span id="volumeValue" style="width:36px; text-align:center; color:var(--accent);">80</span>
+            <div class="volume-control">
+              <input type="range" id="volumeSlider" min="0" max="100" step="1" value="80" class="volume-slider">
+              <span class="volume-value" id="volumeValue">80</span>
             </div>
           </div>
         </div>
 
         <div class="info-note">
-          <span class="info-icon">ⓘ</span>
-          SoundPlace uses your location to personalize your listening experience and queue songs nearby.
+          SoundPlace uses your location to display your pin on the map and show nearby pins queuing songs.
         </div>
       </div>
 
       <!-- ACCOUNT -->
       <div class="settings-section hidden" id="section-account">
         <div class="section-header">
-          <h3>Account Management</h3>
-          <p>Manage your account settings</p>
+          <h3>Account</h3>
+          <p>Manage your account settings and security</p>
         </div>
         
+        <div class="settings-group">
+          <div class="account-info-item">
+            <div class="account-info-label">Username</div>
+            <div class="account-info-value" id="account-username-display">Username</div>
+          </div>
+
+          <div class="account-info-item">
+            <div class="account-info-label">Current Password</div>
+            <div class="account-info-value" id="account-password-display">password</div>
+          </div>
+
+          <div class="account-info-item">
+            <div class="account-info-label">Change Password</div>
+            <div class="password-input-wrapper">
+              <input type="password" id="newPasswordInput" class="password-input" placeholder="New password">
+              <button class="btn-primary" id="changePasswordBtn">Update</button>
+            </div>
+          </div>
+        </div>
+
         <div class="account-actions">
-          <button class="account-btn logout-btn" id="logoutBtn">
-            Logout
-          </button>
-          <button class="account-btn danger-btn" id="deleteBtn">
-            Delete Account
-          </button>
+          <button class="btn-secondary" id="logoutBtn">Logout</button>
+          <button class="btn-danger" id="deleteBtn">Delete Account</button>
         </div>
       </div>
     </div>
@@ -266,6 +265,11 @@
 
     <!-- MAP -->
     <div id="map"></div>
+    <!-- Genre filter placed over the map (top-right inside map area) -->
+    <div id="mapGenreFilter" class="map-genre-filter" style="display:block;">
+      <button id="genreFilterBtn" class="map-genre-btn" title="Filter by genre">Genres ▾</button>
+      <div id="genreFilterDropdown" class="genre-dropdown hidden" aria-hidden="true"></div>
+    </div>
   </main>
 </div>
 
@@ -273,8 +277,8 @@
 <div class="modal" id="queueModal">
   <div class="modal-header">
     <h2 class="modal-title">Current Queue</h2>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button id="clearQueueBtn" class="nav-btn" title="Clear queue">Clear</button>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button id="clearQueueBtn" class="nav-btn" title="Clear queue" style="padding: 8px 14px; font-size: 0.85rem;">Clear</button>
       <button class="modal-close">&times;</button>
     </div>
   </div>
@@ -335,6 +339,11 @@
         <!-- profile avatar intentionally removed per request -->
 
         <!-- profile-info removed: counts and status intentionally hidden per UX request -->
+
+      <div id="profileNowPlayingSection" class="profile-now-playing-section">
+          <h3 class="profile-section-title">Now Playing</h3>
+          <div id="profileNowPlaying"></div>
+      </div>
 
       <div id="profilePlaylistsSection" class="profile-playlists-section">
           <h3 class="profile-section-title">Playlists</h3>

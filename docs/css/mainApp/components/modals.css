@@ -119,8 +119,8 @@
 
 .queue-item{
   background:rgba(255,255,255,.08); 
-  padding:var(--pad-sm);
-  margin-bottom:var(--gap-sm); 
+  padding: 8px 10px;
+  margin-bottom: 5px;
   border-radius:var(--radius-sm);
   font-size:var(--font-sm); 
   transition:.2s;
@@ -131,6 +131,7 @@
   background:rgba(100,200,255,.2); 
   transform:translateX(4px);
   border-color: rgba(100,200,255,.3);
+  cursor: pointer;
 }
 
 #queueModal .queue-item.current, .history-modal .history-item.current {
@@ -180,15 +181,39 @@
 
 .friend-item, .friend-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   padding: 8px 10px;
   background: rgba(30, 30, 50, 0.44);
   border: 1px solid rgba(100, 200, 255, 0.08);
   border-radius: 8px;
   margin-bottom: 8px;
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.friend-row:hover {
+  background: rgba(100, 200, 255, 0.12);
+  border-color: rgba(100, 200, 255, 0.3);
+  transform: translateX(2px);
+}
+
+.friend-row span {
+  font-weight: 600;
+  color: #e0f7ff;
+  font-size: 0.95rem;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-row .nav-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .friend-item:hover, .friend-row:hover {

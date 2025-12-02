@@ -19,6 +19,36 @@
   box-shadow: 0 -8px 30px rgba(0,0,0,.4);
 }
 
+/* Player-specific dropdown (heart menu) - improve contrast and make items thinner */
+#player-actions .dropdown-menu {
+  min-width: 160px;
+  background: linear-gradient(180deg, rgba(20,24,36,0.96), rgba(12,14,22,0.96));
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 6px;
+  box-shadow: 0 6px 18px rgba(2,8,20,0.6);
+  z-index: 1200;
+}
+
+#player-actions .dropdown-menu .menu-item {
+  color: #e6f7ff;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08); /* lighter default background so items don't blend into blue */
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+#player-actions .dropdown-menu .menu-item:hover {
+  background: rgba(233,69,96,0.12);
+  color: #ffffff;
+  transform: translateX(4px);
+  box-shadow: 0 6px 18px rgba(233,69,96,0.08);
+}
+
+#player-actions .dropdown-menu .menu-item:active {
+  transform: translateX(1px) scale(0.997);
+}
+
 .dropdown.active .dropdown-menu {
   display: flex;
 }
@@ -41,9 +71,9 @@
 }
 
 .menu-item{
-  background:none; 
+  background: rgba(100, 200, 255, 0.1);
   border:none; 
-  color:#ccc;
+  color: #e0f2ff;
   padding:8px 10px; 
   text-align:left; 
   border-radius:6px;
@@ -52,15 +82,15 @@
   transition: all 0.14s ease;
 }
 
-.menu-item:hover{background:rgba(100,200,255,.2); color:white;}
+.menu-item:hover{background:rgba(100,200,255,.25); color:white;}
 
 .modal .dropdown { margin-bottom: var(--gap-md); width: 100%; }
 
 .modal .dropdown-btn {
   width: 100%;
-  background: linear-gradient(135deg, rgba(24,28,44,.92), rgba(18,20,34,.9));
-  color: #e8eef8;
-  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(58, 158, 255, 0.15));
+  color: #e0f2ff;
+  border: 1px solid rgba(100, 200, 255, 0.2);
   padding: 8px 10px;
   border-radius: 8px;
   font-weight: 600;
@@ -69,15 +99,17 @@
   transition: all 0.12s ease;
   backdrop-filter: blur(6px);
   font-family: 'Poppins', sans-serif;
-  box-shadow: 0 6px 16px rgba(8,10,18,.28);
+  box-shadow: 0 4px 12px rgba(100, 200, 255, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .modal .dropdown-btn:hover {
+  background: linear-gradient(135deg, rgba(100, 200, 255, 0.25), rgba(58, 158, 255, 0.25));
+  border-color: rgba(100, 200, 255, 0.3);
   transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(10,12,20,.38);
+  box-shadow: 0 6px 16px rgba(100, 200, 255, 0.15);
 }
 
 .modal .dropdown-btn::after {

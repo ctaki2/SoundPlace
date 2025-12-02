@@ -1,18 +1,3 @@
-/* main.css */
-
-@import 'design-system.css';
-@import 'base.css';
-@import 'components/header.css';
-@import 'components/player.css';
-@import 'components/buttons.css';
-@import 'components/modals.css';
-@import 'components/dropdowns.css';
-@import 'components/map-controls.css';
-@import 'utilities.css';
-@import 'components/popups.css'; 
-@import 'settings.css';
-@import 'components/search.css';
-
 /* map-controls.css - New file */
 
 #map-controls {

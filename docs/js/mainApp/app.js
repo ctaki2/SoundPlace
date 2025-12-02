@@ -4,7 +4,7 @@ import {updateTimeLabel, showTemporaryNotification} from './helper.js';
 import {saveQueue, saveManualQueue, updateQueueIndex, saveHistory, saveIntList} from './saveInfo.js';
 import state, {pubUsername} from './variables.js'
 import {setCurrentSongRef, populateQueueUI, populateHistoryUI, populatePlaylistsUI} from "./ui.js";
-import {initMap} from "./map.js";
+import {initMap, focusPinById, highlightMarkersByGenres, clearGenreHighlights} from "./map.js";
 import { initSettings, renderProfileStats } from "./settings.js";
 
 const socket = io();
@@ -266,61 +266,226 @@ audioPlayer.addEventListener("timeupdate", () => {
   updateTimeLabel();
 });
 
+
+
+// ----------------- Genre filter UI -----------------
+const genreFilterBtn = document.getElementById('genreFilterBtn');
+let genreFilterDropdown = document.getElementById('genreFilterDropdown');
+
+function ensureGenreDropdown() {
+  if (!genreFilterDropdown) genreFilterDropdown = document.getElementById('genreFilterDropdown');
+}
+
+function openGenreDropdown() {
+  ensureGenreDropdown();
+  if (!genreFilterDropdown) return;
+  genreFilterDropdown.classList.remove('hidden');
+  genreFilterDropdown.setAttribute('aria-hidden', 'false');
+  if (genreFilterBtn) genreFilterBtn.textContent = 'Genres ▴';
+}
+
+function closeGenreDropdown() {
+  ensureGenreDropdown();
+  if (!genreFilterDropdown) return;
+  genreFilterDropdown.classList.add('hidden');
+  genreFilterDropdown.setAttribute('aria-hidden', 'true');
+  if (genreFilterBtn) genreFilterBtn.textContent = 'Genres ▾';
+}
+
+function toggleGenreDropdown() {
+  ensureGenreDropdown();
+  if (!genreFilterDropdown) return;
+  if (genreFilterDropdown.classList.contains('hidden')) openGenreDropdown(); else closeGenreDropdown();
+}
+
+if (genreFilterBtn) {
+  genreFilterBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleGenreDropdown();
+    try { console.log('genreFilterBtn click toggle'); } catch (e) {}
+  });
+
+  // Close when clicking elsewhere
+  document.addEventListener('click', (e) => {
+    ensureGenreDropdown();
+    if (!genreFilterBtn.contains(e.target) && genreFilterDropdown && !genreFilterDropdown.contains(e.target)) {
+      closeGenreDropdown();
+    }
+  });
+
+  // Prevent clicks inside dropdown from closing it immediately
+  document.addEventListener('click', (e) => {
+    ensureGenreDropdown();
+    if (genreFilterDropdown && genreFilterDropdown.contains(e.target)) {
+      e.stopPropagation && e.stopPropagation();
+    }
+  }, true);
+
+  // Fetch pins to build genre list
+  fetch('/api/pins')
+    .then(res => res.json())
+    .then(pins => {
+      ensureGenreDropdown();
+      if (!genreFilterDropdown || !Array.isArray(pins)) return;
+      const genres = Array.from(new Set(pins.map(p => (p.genre || '').toLowerCase().trim()).filter(Boolean))).sort();
+      genreFilterDropdown.innerHTML = '';
+
+      genres.forEach(g => {
+        const id = `genre-${g.replace(/\s+/g,'_')}`;
+        const label = document.createElement('label');
+        label.className = 'genre-option';
+        label.innerHTML = `<input type="checkbox" id="${id}" data-genre="${g}"> ${g.charAt(0).toUpperCase() + g.slice(1)}`;
+        genreFilterDropdown.appendChild(label);
+
+        const cb = label.querySelector('input');
+        cb.addEventListener('change', () => {
+          const checked = Array.from(genreFilterDropdown.querySelectorAll('input[type=checkbox]:checked')).map(i => i.dataset.genre);
+          if (checked.length === 0) clearGenreHighlights(); else highlightMarkersByGenres(checked);
+        });
+      });
+    })
+    .catch(() => {});
+}
+
+
 const searchInput = document.getElementById("userSearchInput");
 const dropdown = document.getElementById("userSearchDropdown");
 
+let pinsCache = null;
+let pinsCachePromise = null;
+let pinsCacheTimestamp = 0;
+const PIN_CACHE_TTL = 60 * 1000;
+
+function loadPinsForSearch() {
+  const now = Date.now();
+  if (pinsCache && now - pinsCacheTimestamp < PIN_CACHE_TTL) {
+    return Promise.resolve(pinsCache);
+  }
+  if (pinsCachePromise) {
+    return pinsCachePromise;
+  }
+
+  pinsCachePromise = fetch('/api/pins')
+    .then(res => res.json())
+    .then(pins => {
+      const normalized = Array.isArray(pins) ? pins : [];
+      pinsCache = normalized;
+      pinsCacheTimestamp = Date.now();
+      return normalized;
+    })
+    .catch(err => {
+      console.warn('Failed to load pins for search', err);
+      return [];
+    })
+    .finally(() => {
+      pinsCachePromise = null;
+    });
+
+  return pinsCachePromise;
+}
+
 let searchTimeout = null;
+let searchSequenceId = 0;
+
 searchInput.addEventListener("input", function () {
     const query = this.value.trim();
 
-    // Clear previous typing delay
     clearTimeout(searchTimeout);
 
-    // Don't search empty
     if (query.length === 0) {
+        searchSequenceId++;
         dropdown.classList.add("hidden");
         dropdown.innerHTML = "";
         return;
     }
 
-    // Delay typing by 250ms before search
+    const requestId = ++searchSequenceId;
+
     searchTimeout = setTimeout(() => {
-        fetch(`/api/searchUsers?q=${encodeURIComponent(query)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (!data.success) return;
+      const usersPromise = fetch(`/api/searchUsers?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .catch(() => ({ success: false, users: [] }));
 
+      Promise.all([usersPromise, loadPinsForSearch()])
+        .then(([userData, pins]) => {
+          if (requestId !== searchSequenceId) return;
+
+          dropdown.innerHTML = "";
+
+          const users = (userData.success && Array.isArray(userData.users)) ? userData.users : [];
+          const q = query.toLowerCase();
+          const songs = (pins || []).filter(pin => {
+            const haystack = `${pin.song || ''} ${pin.artist || ''}`.toLowerCase();
+            return haystack.includes(q);
+          }).slice(0, 12);
+
+          const hasUsers = users.length > 0;
+          const hasSongs = songs.length > 0;
+
+          if (!hasUsers && !hasSongs) {
+            dropdown.innerHTML = `<div class="search-empty">No results</div>`;
+            dropdown.classList.remove("hidden");
+            return;
+          }
+
+          if (hasUsers) {
+            const header = document.createElement('div');
+            header.className = 'search-section-header';
+            header.textContent = 'Users';
+            dropdown.appendChild(header);
+
+            users.forEach(user => {
+              const item = document.createElement("div");
+              item.className = "search-result-item";
+              item.innerHTML = `
+                <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+                <div class="user-info">
+                  <div class="user-name">${user.username}</div>
+                </div>
+              `;
+
+              item.onclick = () => {
+                dropdown.classList.add("hidden");
                 dropdown.innerHTML = "";
+                openUserProfile(user.username);
+              };
 
-                if (data.users.length === 0) {
-                    dropdown.innerHTML = `<div class="search-empty">No users found</div>`;
-                    dropdown.classList.remove("hidden");
-                    return;
-                }
-
-                data.users.forEach(user => {
-                    const item = document.createElement("div");
-                    item.className = "search-result-item";
-                    
-                    // Use the proper HTML structure with CSS classes
-                    item.innerHTML = `
-                        <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
-                        <div class="user-info">
-                            <div class="user-name">${user.username}</div>
-                        </div>
-                    `;
-
-                    item.onclick = () => {
-                        dropdown.classList.add("hidden");
-                        dropdown.innerHTML = "";
-                        openUserProfile(user.username);
-                    };
-
-                    dropdown.appendChild(item);
-                });
-
-                dropdown.classList.remove("hidden");
+              dropdown.appendChild(item);
             });
+          }
+
+          if (hasSongs) {
+            const header = document.createElement('div');
+            header.className = 'search-section-header';
+            header.textContent = 'Songs';
+            dropdown.appendChild(header);
+
+            songs.forEach(song => {
+              const item = document.createElement('div');
+              item.className = 'search-result-item song-item';
+              item.innerHTML = `
+                <div class="song-info">
+                  <div class="song-title">${song.song}</div>
+                  <div class="song-artist">${song.artist}</div>
+                </div>
+              `;
+
+              item.onclick = () => {
+                dropdown.classList.add('hidden');
+                dropdown.innerHTML = '';
+                try { focusPinById(song.id); } catch (e) { console.warn('focusPin failed', e); }
+              };
+
+              dropdown.appendChild(item);
+            });
+          }
+
+          dropdown.classList.remove("hidden");
+        })
+        .catch(() => {
+          if (requestId !== searchSequenceId) return;
+          dropdown.classList.add('hidden');
+        });
     }, 250);
 });
 

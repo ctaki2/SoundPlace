@@ -7,6 +7,7 @@ const shareLocationBtn = document.getElementById("shareLocBtn");
 const FindMe = document.getElementById("FindMe");
 
 let map, userMarker;
+const pinMarkers = new Map(); // key -> { marker, genre, data }
 let autoCenterView = true;
 // let share = true;
 let locationInterval = null;
@@ -183,69 +184,38 @@ function centerMapOnUser() {
 
 // ---------------------------------------------------------------
 function renderPins(pins, onPlay, onQueue) {
+    pinMarkers.forEach(({ marker }) => {
+        map.removeLayer(marker);
+    });
+    pinMarkers.clear();
+
     map.eachLayer(layer => {
         if (layer instanceof L.Marker && layer !== userMarker) {
             map.removeLayer(layer);
         }
     });
+    const createMarkerIcon = (color) => L.icon({
+        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
+        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
     const genreIcons = {
-        ' pop': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' rock': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' r&b': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' electronic': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' classical': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' folk': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        }),
-        ' country': L.icon({
-            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png",
-            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        })
-}
+        'pop': createMarkerIcon('violet'),
+        'rock': createMarkerIcon('red'),
+        'rap': createMarkerIcon('orange'),
+        'jazz': createMarkerIcon('green'),
+        'electronic': createMarkerIcon('blue'),
+        'folk': createMarkerIcon('yellow'),
+        'classical': createMarkerIcon('grey'),
+        'r&b': createMarkerIcon('black'),
+        'country': createMarkerIcon('gold')
+    };
+
+    const defaultGenreIcon = createMarkerIcon('violet');
     // const redIcon = L.icon({
     //     iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
     //     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
@@ -264,8 +234,11 @@ function renderPins(pins, onPlay, onQueue) {
         };
 
         //const marker = L.marker([pin.lat, pin.lng], { icon: redIcon }).addTo(map);
-        const icon = genreIcons[pin.genre.toLowerCase()] || genreIcons[' rock'];
+        const normalizedGenre = (pin.genre || '').toLowerCase().trim();
+        const icon = genreIcons[normalizedGenre] || defaultGenreIcon;
         const marker = L.marker([pin.lat, pin.lng], { icon }).addTo(map);
+        const key = pin.id !== undefined && pin.id !== null ? String(pin.id) : `${pin.lat},${pin.lng}`;
+        pinMarkers.set(key, { marker, genre: normalizedGenre, pin });
         marker.bindPopup(`
             <div class="popup-content">
                 <div class="popup-header">
@@ -294,5 +267,41 @@ function renderPins(pins, onPlay, onQueue) {
             popup.querySelector(".popup-queue-btn").onclick =
                 () => onQueue(pin.audio_url, pin.song, pin.artist, false);
         });
+    });
+}
+
+export function focusPinById(id) {
+    if (!map) return;
+    const entry = pinMarkers.get(String(id));
+    if (!entry) return;
+    const { marker } = entry;
+    const latLng = marker.getLatLng();
+    map.setView(latLng, 15, { animate: true });
+    const popup = marker.getPopup();
+    if (popup) {
+        const prevAutoPan = popup.options.autoPan;
+        popup.options.autoPan = false;
+        marker.openPopup();
+        popup.options.autoPan = prevAutoPan;
+    } else {
+        marker.openPopup();
+    }
+}
+
+export function highlightMarkersByGenres(genres = []) {
+    const normalized = genres.map(g => (g || '').toLowerCase().trim()).filter(Boolean);
+    const hasFilter = normalized.length > 0;
+
+    pinMarkers.forEach(({ marker, genre }) => {
+        const match = hasFilter ? normalized.includes(genre) : true;
+        marker.setOpacity(match ? 1 : 0.25);
+        marker.setZIndexOffset(match ? 100 : 0);
+    });
+}
+
+export function clearGenreHighlights() {
+    pinMarkers.forEach(({ marker }) => {
+        marker.setOpacity(1);
+        marker.setZIndexOffset(0);
     });
 }

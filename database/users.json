@@ -30,38 +30,17 @@
           "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
           "title": " Chinatown",
           "artist": "VADE"
+        },
+        {
+          "url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
+          "title": " New Soul",
+          "artist": "New Soul"
         }
       ]
     },
-    "queue": [
-      {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
-        "title": " space​.​.​.​dude (ietsje anders)",
-        "artist": "Richard Jonas"
-      },
-      {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
-        "title": " New Soul",
-        "artist": "New Soul"
-      },
-      {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
-        "title": " Chinatown",
-        "artist": "VADE"
-      },
-      {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/Vaniish%20-%20Observatory%20Time.mp3",
-        "title": " Observatory Time",
-        "artist": "Vaniish"
-      },
-      {
-        "url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3",
-        "title": " Lighters Out",
-        "artist": "Measles Mumps Rubella"
-      }
-    ],
+    "queue": [],
     "queueIndex": 4,
-    "manualQueue": 5,
+    "manualQueue": 0,
     "history": [
       {
         "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
@@ -116,6 +95,12 @@
         "title": " Chinatown",
         "artist": "VADE",
         "timestamp": 1764619387271
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
+        "title": " New Soul",
+        "artist": "New Soul",
+        "timestamp": 1764661832804
       }
     ],
     "friends": [
@@ -123,7 +108,7 @@
     ],
     "friendRequestsSent": [],
     "friendRequestsReceived": [],
-    "shareLoc": true,
+    "shareLoc": false,
     "intList": false,
     "volume": 0
   },
