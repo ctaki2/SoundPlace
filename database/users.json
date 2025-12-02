@@ -1,4 +1,17 @@
 {
+  "123": {
+    "password": "123",
+    "playlists": {},
+    "queue": [],
+    "queueIndex": -1,
+    "manualQueue": 0,
+    "history": [],
+    "friends": [],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false
+  },
   "a": {
     "password": "1",
     "playlists": {

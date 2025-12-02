@@ -188,15 +188,72 @@ function renderPins(pins, onPlay, onQueue) {
             map.removeLayer(layer);
         }
     });
-
-    const redIcon = L.icon({
-        iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
+    const genreIcons = {
+        ' pop': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' rock': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' r&b': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' electronic': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' classical': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' folk': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        }),
+        ' country': L.icon({
+            iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        })
+}
+    // const redIcon = L.icon({
+    //     iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+    //     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    //     iconSize: [25, 41],
+    //     iconAnchor: [12, 41],
+    //     popupAnchor: [1, -34],
+    //     shadowSize: [41, 41]
+    // });
 
     pins.forEach(pin => {
         Pins[`${pin.lat},${pin.lng}`] = {
@@ -206,8 +263,9 @@ function renderPins(pins, onPlay, onQueue) {
             lastQueuedAt: 0
         };
 
-        const marker = L.marker([pin.lat, pin.lng], { icon: redIcon }).addTo(map);
-
+        //const marker = L.marker([pin.lat, pin.lng], { icon: redIcon }).addTo(map);
+        const icon = genreIcons[pin.genre.toLowerCase()] || genreIcons[' rock'];
+        const marker = L.marker([pin.lat, pin.lng], { icon }).addTo(map);
         marker.bindPopup(`
             <div class="popup-content">
                 <div class="popup-header">
@@ -215,6 +273,7 @@ function renderPins(pins, onPlay, onQueue) {
                     <div class="popup-artist">${pin.artist}</div>
                 </div>
                 <div class="popup-song">${pin.song}</div>
+                <div class="popup-story"><em>${pin.story}<br></em></div> <!-- Added story display -->
                 <div class="popup-actions">
                     <button class="popup-play-btn">
                         <span class="btn-icon">▶</span>

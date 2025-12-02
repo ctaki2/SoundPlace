@@ -8,7 +8,8 @@
         "lat": 41.895,
         "lng": -87.62,
         "story": "I compose a lot on piano too, I think increasingly now. I started writing a lot on guitar, I think, because it was this unknown instrument to me where I wasn't following a set of rules that I had learned over my years of classical training. I wasn't going back to any habits. I was just letting my heart and fingers wander.",
-        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3"
+        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3",
+        "genre": " jazz"
     },
     {
         "id": 2,
@@ -19,7 +20,8 @@
         "lat": 41.884,
         "lng": -87.628,
         "story": "Music is an open sky; it's vast. I wouldn't be so foolish as to ever feel that there isn't more music to be done, because it is out there. And I want to do it.",
-        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/SunnyScy%20-%20It%27s%20a%20Party%21.mp3"
+        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/SunnyScy%20-%20It%27s%20a%20Party%21.mp3",
+        "genre": " pop"
     },
     {
         "id": 3,
@@ -30,7 +32,8 @@
         "lat": 41.83,
         "lng": -87.62,
         "story": "I was in my house, and someone I know was doing the washing up and singing that song. And in another room, I think there was a song playing on the radio. And the layout of the house means that if you're in one room you can't hear what's going on in the other. But I stood between the two rooms, and there was this incredible sound clash that sounded really stunning.",
-        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/Glass%20Candy%20-%20Iko%21%20Iko%21.mp3"
+        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/Glass%20Candy%20-%20Iko%21%20Iko%21.mp3",
+        "genre": " electronic"
     },
     {
         "id": 4,
@@ -41,7 +44,8 @@
         "lat": 41.855,
         "lng": -87.654,
         "story": "I feel like it's kind of this story that's unfolding and things like that. And like we're discovering all the layers within the relationship.",
-        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/De%20Portables%20-%20Here%20I%20Stand.mp3"
+        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/De%20Portables%20-%20Here%20I%20Stand.mp3",
+        "genre": " folk"
     },
     {
         "id": 5,
@@ -52,142 +56,131 @@
         "lat": 41.794,
         "lng": -87.589,
         "story": "It felt like somebody dropped a hood over me. And I remember that many trains went by and I was still standing there listening. I finally went home. And I don't think that I stopped playing it for days, just over and over and over again. Mostly on headphones, so that's really when it fills your entire being.",
-        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3"
+        "audio_url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3",
+        "genre": " rap"
     },
     {
         "id": 6,
-        "license": " CC BY",
-        "artist": "VADE",
-        "song": " Chinatown",
-        "location": " South Chicago",
-        "lat": 41.7397,
-        "lng": -87.5544,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 "
-    },
-    {
-        "id": 7,
         "license": " CC BY-NC-SA",
         "artist": "the Taft",
         "song": " I usb I was hildi d you",
         "location": " East Side",
         "lat": 41.682,
         "lng": -87.55,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/the%20Taft%20-%20I%20usb%20I%20was%20hildi%20d%20you.mp3"
+        "story": " \"Artist is from neighborhood\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/the%20Taft%20-%20I%20usb%20I%20was%20hildi%20d%20you.mp3",
+        "genre": " rock"
     },
     {
-        "id": 8,
+        "id": 7,
         "license": " CC BY-NC",
         "artist": "Circus Marcus",
         "song": " La Gang",
         "location": " West Ridge",
         "lat": 41.98,
         "lng": -87.691,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Circus%20Marcus%20-%20La%20Gang.mp3"
+        "story": " \"Seasonal Inspiration\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Circus%20Marcus%20-%20La%20Gang.mp3",
+        "genre": " classical"
     },
     {
-        "id": 9,
+        "id": 8,
         "license": " CC BY-NC",
         "artist": "Alex-Productions",
         "song": " Horizons (short 1)",
         "location": " Rogers Park",
         "lat": 42.01,
         "lng": -87.67,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Alex-Productions%20-%20Horizons%20%28short%201%29.mp3"
+        "story": " \"the quiet sounds of wind inspired this ambient piece.\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Alex-Productions%20-%20Horizons%20%28short%201%29.mp3",
+        "genre": " classical"
     },
     {
-        "id": 10,
+        "id": 9,
         "license": " CC BY-NC-ND",
         "artist": "Dr Freebs",
         "song": " Sunshine",
         "location": " Lincoln Square",
         "lat": 41.97,
         "lng": -87.69,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Dr%20Freebs%20-%20Sunshine.mp3 "
+        "story": " \"Written after a walk here <3\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Dr%20Freebs%20-%20Sunshine.mp3",
+        "genre": " r&b"
     },
     {
-        "id": 11,
+        "id": 10,
         "license": " CC BY-NC-ND",
         "artist": "Container",
         "song": " Soak",
         "location": " Lake View",
         "lat": 41.941,
         "lng": -87.655,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Container%20-%20Soak.mp3 "
+        "story": " \"Created in Transit\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Container%20-%20Soak.mp3",
+        "genre": " electronic"
     },
     {
-        "id": 12,
+        "id": 11,
         "license": " CC BY-NC-ND",
         "artist": "fanisatt",
         "song": " In the Middle of Nowhere (ft. Odarka)",
         "location": " Uptown",
         "lat": 41.97,
         "lng": -87.66,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/fanisatt%20-%20In%20the%20Middle%20of%20Nowhere%20%28ft.%20Odarka%29.mp3"
+        "story": " \"This track emerged from memories of sneaking into small venues near the Riviera theatre.\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/fanisatt%20-%20In%20the%20Middle%20of%20Nowhere%20%28ft.%20Odarka%29.mp3",
+        "genre": " pop"
     },
     {
-        "id": 13,
+        "id": 12,
         "license": " CC BY-NC-ND",
         "artist": "The Pop Winds",
         "song": " Will Be A Dream",
         "location": " Edgewater",
         "lat": 41.98,
         "lng": -87.66,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/The%20Pop%20Winds%20-%20Will%20Be%20A%20Dream.mp3"
+        "story": " Had my first live perfomance here\"\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/The%20Pop%20Winds%20-%20Will%20Be%20A%20Dream.mp3",
+        "genre": " pop"
     },
     {
-        "id": 14,
+        "id": 13,
         "license": " CC BY-NC",
         "artist": "DICTION UNO",
         "song": " Arachnid State of Mind",
         "location": " West Town",
         "lat": 41.9,
         "lng": -87.68,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3"
+        "story": " \"Started as a voice memo\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "genre": " rap"
     },
     {
-        "id": 15,
-        "license": " CC BY-NC-ND",
-        "artist": "Kuniya",
-        "song": " Higan no Hana",
-        "location": " Logan Square",
-        "lat": 41.9231,
-        "lng": -87.7093,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Kuniya%20-%20Higan%20no%20Hana.mp3"
-    },
-    {
-        "id": 16,
+        "id": 14,
         "license": " CC BY-NC-ND",
         "artist": "Tim Evans",
         "song": " Empty As My Head",
         "location": " Humboldt Park",
         "lat": 41.915,
         "lng": -87.705,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Tim%20Evans%20-%20Empty%20As%20My%20Head.mp3"
+        "story": " \"Artist is from neighborhood\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Tim%20Evans%20-%20Empty%20As%20My%20Head.mp3",
+        "genre": " folk"
     },
     {
-        "id": 17,
+        "id": 15,
         "license": " CC BY",
         "artist": "Bryan Mathys",
         "song": " Wild Heart",
         "location": " Austin",
         "lat": 41.88,
         "lng": -87.76,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Bryan%20Mathys%20-%20Wild%20Heart.mp3"
+        "story": " \"The summer heat influenced this song\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Bryan%20Mathys%20-%20Wild%20Heart.mp3",
+        "genre": " country"
     },
     {
-        "id": 18,
+        "id": 16,
         "license": " CC BY-NC-ND",
         "artist": "Rex Hobart and Misery Boys",
         "song": " Good Aint Gone",
@@ -195,138 +188,139 @@
         "lat": 41.881,
         "lng": -87.708,
         "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Rex%20Hobart%20and%20Misery%20Boys%20-%20Good%20Ain%27t%20Gone.mp3"
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Rex%20Hobart%20and%20Misery%20Boys%20-%20Good%20Ain%27t%20Gone.mp3",
+        "genre": " country"
     },
     {
-        "id": 19,
+        "id": 17,
         "license": " CC BY-NC-ND",
         "artist": "New Soul",
         "song": " New Soul",
         "location": " Englewood",
         "lat": 41.777,
         "lng": -87.641,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 "
+        "story": " \"late-night writing session\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
+        "genre": " r&b"
     },
     {
-        "id": 20,
+        "id": 18,
         "license": " CC BY",
         "artist": "Broke For Free",
         "song": " Calm The F*** Down",
         "location": " Washington Heights",
         "lat": 41.752,
         "lng": -87.647,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Broke%20For%20Free%20-%20Calm%20The%20Fuck%20Down.mp3"
+        "story": " \"childhood neighborhood\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Broke%20For%20Free%20-%20Calm%20The%20Fuck%20Down.mp3",
+        "genre": " electronic"
     },
     {
-        "id": 21,
+        "id": 19,
         "license": " CC BY-NC-SA",
         "artist": "Measles Mumps Rubella",
         "song": " Lighters Out",
         "location": " Pullman",
         "lat": 41.678,
         "lng": -87.605,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3"
+        "story": " \"recorded on this block\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Measles%20Mumps%20Rubella%20-%20Lighters%20Out.mp3",
+        "genre": " rock"
     },
     {
-        "id": 22,
+        "id": 20,
         "license": " CC BY-NC-ND",
         "artist": "BOYTOY",
         "song": " Pulp",
         "location": " Bronzeville",
         "lat": 41.83,
         "lng": -87.617,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/BOYTOY%20-%20Pulp.mp3"
+        "story": " \"Built with friends nearby\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/BOYTOY%20-%20Pulp.mp3",
+        "genre": " rock"
     },
     {
-        "id": 23,
+        "id": 21,
         "license": " CC BY-NC-ND",
         "artist": "GeoGenLabel",
         "song": " \u0426\u0430\u0440\u044c \u041f\u044b\u043b\u0438 / The King of Dust ver1.0",
         "location": " Bridgeport",
         "lat": 41.833,
         "lng": -87.645,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/GeoGenLabel%20-%20%D0%A6%D0%B0%D1%80%D1%8C%20%D0%9F%D1%8B%D0%BB%D0%B8%20_%20The%20King%20of%20Dust%20ver1.0.mp3"
+        "story": " \"Firs drafted in a shared artist loft off Morgan Street :)\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/GeoGenLabel%20-%20%D0%A6%D0%B0%D1%80%D1%8C%20%D0%9F%D1%8B%D0%BB%D0%B8%20_%20The%20King%20of%20Dust%20ver1.0.mp3",
+        "genre": " rap"
     },
     {
-        "id": 24,
+        "id": 22,
         "license": " CC BY-NC",
         "artist": "CODESCORN",
         "song": " streaming [sng]_mastered",
         "location": " Pilsen",
         "lat": 41.8505,
         "lng": -87.669,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/CODESCORN%20-%20streaming%20%5Bsng%5D_mastered.mp3"
+        "story": " \"This piece was composed after spending the afternoon near Pilsen's 16th street murals. The layred colors influenced the songs textured sound.\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/CODESCORN%20-%20streaming%20%5Bsng%5D_mastered.mp3",
+        "genre": " rap"
     },
     {
-        "id": 25,
+        "id": 23,
         "license": " CC BY-NC-ND",
         "artist": "Vincent Augustus",
         "song": " waste time",
         "location": " West Loop",
         "lat": 41.884,
         "lng": -87.647,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3"
+        "story": " \"Recorded Nearby\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "genre": " r&b"
     },
     {
-        "id": 26,
+        "id": 24,
         "license": " CC BY-NC-SA",
         "artist": "Hogan Grip",
         "song": " Stance Gives You Balance",
         "location": " Brighton Park",
         "lat": 41.85,
         "lng": -87.706,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Hogan%20Grip%20-%20Stance%20Gives%20You%20Balance.mp3"
+        "story": " \"improvised\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Hogan%20Grip%20-%20Stance%20Gives%20You%20Balance.mp3",
+        "genre": " rock"
     },
     {
-        "id": 27,
+        "id": 25,
         "license": " CC BY-NC-SA",
         "artist": "Richard Jonas",
         "song": " space\u200b.\u200b.\u200b.\u200bdude (ietsje anders)",
         "location": " Archer Heights",
         "lat": 41.792,
         "lng": -87.728,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3"
+        "story": " \"South Side inspired\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+        "genre": " electronic"
     },
     {
-        "id": 28,
+        "id": 26,
         "license": " CC BY-NC-ND",
         "artist": "Monolog Rockstars",
         "song": " Mini Copies",
         "location": " Claering",
         "lat": 41.785,
         "lng": -87.784,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3"
+        "story": " \"Rewritten after breakthrough\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "genre": " rap"
     },
     {
-        "id": 29,
+        "id": 27,
         "license": " CC BY-NC-ND",
         "artist": "Vaniish",
         "song": " Observatory Time",
         "location": " Hegewisch",
         "lat": 41.678,
         "lng": -87.545,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Vaniish%20-%20Observatory%20Time.mp3"
-    },
-    {
-        "id": 30,
-        "license": " CC BY-NC-ND",
-        "artist": "Doug Gillard",
-        "song": " Peachy Gray",
-        "location": " Beverly",
-        "lat": 41.725,
-        "lng": -87.669,
-        "story": " \"\"",
-        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Doug%20Gillard%20-%20Peachy%20Gray.mp3"
+        "story": " \"Started as a mistake lol\"",
+        "audio_url": " https://oleafkuh.github.io/soundplace-tracks/Vaniish%20-%20Observatory%20Time.mp3",
+        "genre": " rock"
     }
 ]
