@@ -199,7 +199,7 @@
             </label>
           </div>
 
-          <div class="settings-item no-divider">
+          <div class="settings-item">
             <div class="item-label-group">
               <h4 class="item-label">Volume</h4>
               <p class="item-description">Default playback volume</p>
@@ -207,6 +207,17 @@
             <div class="volume-control">
               <input type="range" id="volumeSlider" min="0" max="100" step="1" value="80" class="volume-slider">
               <span class="volume-value" id="volumeValue">80</span>
+            </div>
+          </div>
+
+          <div class="settings-item no-divider">
+            <div class="item-label-group">
+              <h4 class="item-label">Auto Queue Distance</h4>
+              <p class="item-description">Distance in meters to auto-queue nearby songs</p>
+            </div>
+            <div class="volume-control">
+              <input type="range" id="autoQueueDistanceSlider" min="0" max="1000" step="10" value="150" class="volume-slider">
+              <span class="volume-value" id="autoQueueDistanceValue">150</span>
             </div>
           </div>
         </div>

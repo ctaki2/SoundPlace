@@ -1,7 +1,7 @@
 // settings.js
 
 import state, {pubUsername}from "./variables.js";
-import { saveIntList, saveVolume } from "./saveInfo.js";
+import { saveIntList, saveVolume, saveAutoQueueDistance } from "./saveInfo.js";
 import { openModal } from "./app.js";
 
 // Helper to update constraint indicators
@@ -133,6 +133,27 @@ export function initSettings() {
     volumeSlider.addEventListener("change", () => {
       // persist on change commit
       saveVolume();
+    });
+  }
+
+  // AUTO QUEUE DISTANCE SLIDER
+  const autoQueueDistanceSlider = document.getElementById("autoQueueDistanceSlider");
+  const autoQueueDistanceValue = document.getElementById("autoQueueDistanceValue");
+  if (autoQueueDistanceSlider && autoQueueDistanceValue) {
+    // initialize from state
+    const initDistance = (typeof state.autoQueueDistance === 'number') ? state.autoQueueDistance : 150;
+    autoQueueDistanceSlider.value = String(initDistance);
+    autoQueueDistanceValue.textContent = String(initDistance);
+
+    autoQueueDistanceSlider.addEventListener("input", () => {
+      const d = parseInt(autoQueueDistanceSlider.value, 10);
+      state.autoQueueDistance = d;
+      autoQueueDistanceValue.textContent = d;
+    });
+
+    autoQueueDistanceSlider.addEventListener("change", () => {
+      // persist on change commit
+      saveAutoQueueDistance();
     });
   }
 

@@ -147,7 +147,6 @@ function updateLocation() {
 }
 
 
-// ---------------------------------------------------------------
 // AUTO QUEUE SONG
 // ---------------------------------------------------------------
 function autoQueueSong(lat, lng, onQueue) {
@@ -160,7 +159,7 @@ function autoQueueSong(lat, lng, onQueue) {
         const pin = Pins[key];
         const [pLat, pLng] = key.split(",").map(Number);
 
-        if (distanceMeters(pLat, pLng, lat, lng) < 100) {
+        if (distanceMeters(pLat, pLng, lat, lng) < state.autoQueueDistance) {
             const timeSince = now - (pin.lastQueuedAt || 0);
 
             if (timeSince >= 5 * 60 * 1000) {
@@ -226,11 +225,15 @@ function renderPins(pins, onPlay, onQueue) {
     // });
 
     pins.forEach(pin => {
+        // Preserve lastQueuedAt if pin already exists
+        const existingPin = Pins[`${pin.lat},${pin.lng}`];
+        const lastQueuedAt = existingPin ? existingPin.lastQueuedAt : 0;
+        
         Pins[`${pin.lat},${pin.lng}`] = {
             audio_url: pin.audio_url,
             song: pin.song,
             artist: pin.artist,
-            lastQueuedAt: 0
+            lastQueuedAt: lastQueuedAt
         };
 
         //const marker = L.marker([pin.lat, pin.lng], { icon: redIcon }).addTo(map);

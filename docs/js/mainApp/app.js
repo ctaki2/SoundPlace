@@ -29,6 +29,12 @@ fetch(`/api/getUser/${pubUsername}`)
         } else {
           state.volume = (state.volume !== undefined && state.volume !== null) ? state.volume : 80;
         }
+        // load user autoQueueDistance
+        if (userData.autoQueueDistance !== undefined && userData.autoQueueDistance !== null) {
+          state.autoQueueDistance = Number(userData.autoQueueDistance);
+        } else {
+          state.autoQueueDistance = (state.autoQueueDistance !== undefined && state.autoQueueDistance !== null) ? state.autoQueueDistance : 150;
+        }
       console.log("User loaded:", userData);
     } else {
       console.warn("User load failed:", data.message);
@@ -55,6 +61,16 @@ fetch(`/api/getUser/${pubUsername}`)
       if (vs) {
         vs.value = (typeof state.volume === 'number') ? String(state.volume) : '80';
         if (vv) vv.textContent = vs.value;
+      }
+    } catch (e) {}
+
+    // update autoQueueDistance UI slider if present
+    try {
+      const ads = document.getElementById('autoQueueDistanceSlider');
+      const adv = document.getElementById('autoQueueDistanceValue');
+      if (ads) {
+        ads.value = (typeof state.autoQueueDistance === 'number') ? String(state.autoQueueDistance) : '150';
+        if (adv) adv.textContent = ads.value;
       }
     } catch (e) {}
 

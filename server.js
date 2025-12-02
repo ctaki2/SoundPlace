@@ -57,7 +57,9 @@ app.post("/api/register", (req, res) => {
     friendRequestsSent: [],
     friendRequestsReceived: [],
     shareLoc: true,
-    intList: false
+    intList: false,
+    volume: 80,
+    autoQueueDistance: 150
   };
 
   saveUsers(users);
@@ -127,6 +129,11 @@ app.post("/api/updateUser", (req, res) => {
   if (updates.volume !== undefined) {
     // store volume as numeric 0-100
     users[username].volume = Number(updates.volume);
+  }
+
+  if (updates.autoQueueDistance !== undefined) {
+    // store autoQueueDistance as numeric value
+    users[username].autoQueueDistance = Number(updates.autoQueueDistance);
   }
 
   saveUsers(users);

@@ -106,3 +106,15 @@ export async function saveVolume() {
     console.error(err);
   }
 }
+
+export async function saveAutoQueueDistance() {
+  try {
+    await fetch("/api/updateUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: pubUsername, updates: { autoQueueDistance: Number(state.autoQueueDistance) } })
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}

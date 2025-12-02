@@ -35,7 +35,23 @@
         }
       ]
     },
-    "queue": [],
+    "queue": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "title": " Arachnid State of Mind",
+        "artist": "DICTION UNO"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Circus%20Marcus%20-%20La%20Gang.mp3",
+        "title": " La Gang",
+        "artist": "Circus Marcus"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "title": " Arachnid State of Mind",
+        "artist": "DICTION UNO"
+      }
+    ],
     "queueIndex": 0,
     "manualQueue": 0,
     "history": [
@@ -144,7 +160,8 @@
     "friendRequestsReceived": [],
     "shareLoc": true,
     "intList": false,
-    "volume": 0
+    "volume": 0,
+    "autoQueueDistance": 180
   },
   "b": {
     "password": "1",
@@ -293,5 +310,136 @@
     "friendRequestsReceived": [],
     "shareLoc": true,
     "intList": false
+  },
+  "d": {
+    "password": "1",
+    "playlists": {},
+    "queue": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "title": " Arachnid State of Mind",
+        "artist": "DICTION UNO"
+      }
+    ],
+    "queueIndex": -1,
+    "manualQueue": 0,
+    "history": [],
+    "friends": [],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false,
+    "autoQueueDistance": 500
+  },
+  "e": {
+    "password": "1",
+    "playlists": {},
+    "queue": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Rex%20Hobart%20and%20Misery%20Boys%20-%20Good%20Ain%27t%20Gone.mp3",
+        "title": " Good Aint Gone",
+        "artist": "Rex Hobart and Misery Boys"
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20To%20Come%20Home.mp3",
+        "title": "To Come Home",
+        "artist": "kesta"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "title": " Arachnid State of Mind",
+        "artist": "DICTION UNO"
+      }
+    ],
+    "queueIndex": 0,
+    "manualQueue": 3,
+    "history": [
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/SunnyScy%20-%20It%27s%20a%20Party%21.mp3",
+        "title": "Its a Party!q",
+        "artist": "SunnyScy",
+        "timestamp": 1764695730536
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus",
+        "timestamp": 1764695876314
+      }
+    ],
+    "friends": [],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false,
+    "volume": 0,
+    "autoQueueDistance": 460
+  },
+  "x": {
+    "password": "1",
+    "playlists": {
+      "efi": [
+        {
+          "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+          "title": " waste time",
+          "artist": "Vincent Augustus"
+        }
+      ]
+    },
+    "queue": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus"
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/SunnyScy%20-%20It%27s%20a%20Party%21.mp3",
+        "title": "Its a Party!q",
+        "artist": "SunnyScy"
+      },
+      {
+        "url": "https://oleafkuh.github.io/soundplace-tracks/SunnyScy%20-%20It%27s%20a%20Party%21.mp3",
+        "title": "Its a Party!q",
+        "artist": "SunnyScy"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/DICTION%20UNO%20-%20Arachnid%20State%20of%20Mind.mp3",
+        "title": " Arachnid State of Mind",
+        "artist": "DICTION UNO"
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Circus%20Marcus%20-%20La%20Gang.mp3",
+        "title": " La Gang",
+        "artist": "Circus Marcus"
+      }
+    ],
+    "queueIndex": 0,
+    "manualQueue": 3,
+    "history": [
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus",
+        "timestamp": 1764698796625
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Vincent%20Augustus%20-%20waste%20time.mp3",
+        "title": " waste time",
+        "artist": "Vincent Augustus",
+        "timestamp": 1764698844249
+      }
+    ],
+    "friends": [],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false,
+    "volume": 4,
+    "autoQueueDistance": 620
   }
 }

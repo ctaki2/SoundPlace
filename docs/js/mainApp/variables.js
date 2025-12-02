@@ -14,7 +14,8 @@ const state = {
   friendRequestsReceived: [],
   shareLoc: null,
   intList: null,
-  volume: 50
+  volume: 50,
+  autoQueueDistance: 150
 };
 
 export default state;
