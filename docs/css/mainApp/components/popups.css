@@ -71,6 +71,18 @@
     padding: 0 4px;
 }
 
+.popup-story{
+    font-size: var(--font-sm);
+    color: #ffa6a6; 
+    font-weight: 500; 
+    font-size: 0.9rem; 
+    line-height: 1.4; 
+    margin-top: 8px;
+    margin-bottom: 10px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
 .popup-actions {
     display: flex;
     gap: 8px;

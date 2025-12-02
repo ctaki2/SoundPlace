@@ -273,7 +273,7 @@ function renderPins(pins, onPlay, onQueue) {
                     <div class="popup-artist">${pin.artist}</div>
                 </div>
                 <div class="popup-song">${pin.song}</div>
-                <div class="popup-story"><em>${pin.story}<br></em></div> <!-- Added story display -->
+                <div class="popup-story">${pin.story}<br></div> <!-- Added story display -->
                 <div class="popup-actions">
                     <button class="popup-play-btn">
                         <span class="btn-icon">▶</span>
