@@ -869,7 +869,7 @@ input:checked + .toggle-slider:before {
 }
 
 /* Modal */
-.modal-close {
+.settings-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -882,7 +882,7 @@ input:checked + .toggle-slider:before {
   padding: 4px 8px;
 }
 
-.modal-close:hover {
+.settings-close:hover {
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -1023,8 +1023,7 @@ input:checked + .toggle-slider:before {
 }
 
 /* Close Button */
-.settings-close,
-.modal-close {
+.settings-close {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -1038,8 +1037,7 @@ input:checked + .toggle-slider:before {
   z-index: 10;
 }
 
-.settings-close:hover,
-.modal-close:hover {
+.settings-close:hover {
   color: rgba(255, 255, 255, 0.8);
 }
 

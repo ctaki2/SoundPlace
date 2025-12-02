@@ -429,11 +429,6 @@ searchInput.addEventListener("input", function () {
           }
 
           if (hasUsers) {
-            const header = document.createElement('div');
-            header.className = 'search-section-header';
-            header.textContent = 'Users';
-            dropdown.appendChild(header);
-
             users.forEach(user => {
               const item = document.createElement("div");
               item.className = "search-result-item";
@@ -455,11 +450,6 @@ searchInput.addEventListener("input", function () {
           }
 
           if (hasSongs) {
-            const header = document.createElement('div');
-            header.className = 'search-section-header';
-            header.textContent = 'Songs';
-            dropdown.appendChild(header);
-
             songs.forEach(song => {
               const item = document.createElement('div');
               item.className = 'search-result-item song-item';
@@ -541,6 +531,28 @@ function openUserProfile(username) {
         if (!data.success) return;
 
         const user = data.data;
+        const historyArr = Array.isArray(user.history) ? user.history : [];
+
+        const nowPlayingContainer = document.getElementById("profileNowPlaying");
+        if (nowPlayingContainer) {
+          nowPlayingContainer.innerHTML = "";
+          const latestPlay = user.currentSong || historyArr[historyArr.length - 1];
+
+          if (latestPlay && (latestPlay.title || latestPlay.artist)) {
+            nowPlayingContainer.innerHTML = `
+              <div class="now-playing-item">
+                <div class="now-playing-content">
+                  <div class="now-playing-track">
+                    <span class="track-title">${latestPlay.title || 'Unknown Title'}</span>
+                    <span class="track-artist">${latestPlay.artist || 'Unknown Artist'}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            nowPlayingContainer.innerHTML = '<p class="empty-state">No recent plays</p>';
+          }
+        }
 
         // Fill modal basic info
         document.getElementById("profileUsername").innerText = `${username}'s Profile`;
@@ -582,7 +594,6 @@ function openUserProfile(username) {
           const topSongsList = document.getElementById("profileTopSongsList");
           topSongsList.innerHTML = "";
 
-          const historyArr = user.history || [];
           if (historyArr.length === 0) {
             topSongsList.innerHTML = '<p class="empty-state">No history yet</p>';
           } else {

@@ -84,12 +84,12 @@
 .search-result-item {
     display: flex;
     align-items: center;
-    padding: 14px 16px; /* Increased padding */
+    padding: 10px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     transition: all 0.2s ease;
     color: #e0e0e0;
-    gap: 12px; /* Added gap for better spacing */
+    gap: 10px;
 }
 
 .search-result-item:last-child {
@@ -159,16 +159,16 @@
 }
 
 .user-avatar {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: linear-gradient(135deg, #e94560, #64c8ff);
-    margin-right: 12px;
+    margin-right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: white;
 }
 
@@ -208,14 +208,14 @@
     }
     
     .search-result-item {
-        padding: 10px 14px;
+        padding: 9px 12px;
     }
     
     .user-avatar {
-        width: 28px;
-        height: 28px;
+        width: 26px;
+        height: 26px;
         font-size: 0.7rem;
-        margin-right: 10px;
+        margin-right: 8px;
     }
 }
 
@@ -304,101 +304,6 @@
     width: 100%;
 }
 
-.profile-playlists-section {
-    margin-top: 18px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(100, 200, 255, 0.15);
-}
-
-.profile-section-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: rgba(100, 200, 255, 0.8);
-    margin-bottom: 12px;
-    font-family: 'Poppins', sans-serif;
-}
-
-#profilePlaylistsList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-height: 280px;
-    overflow-y: auto;
-    padding-right: 4px;
-}
-
-#profilePlaylistsList::-webkit-scrollbar { width: 5px; }
-#profilePlaylistsList::-webkit-scrollbar-track { background: transparent; }
-#profilePlaylistsList::-webkit-scrollbar-thumb {
-  background: rgba(100, 200, 255, 0.2);
-  border-radius: 3px;
-}
-#profilePlaylistsList::-webkit-scrollbar-thumb:hover { background: rgba(100, 200, 255, 0.4); }
-
-.profile-playlist-item {
-    background: rgba(30, 30, 50, 0.6);
-    border: 1px solid rgba(100, 200, 255, 0.12);
-    border-radius: 8px;
-    padding: 11px 12px;
-    transition: none;
-    cursor: default;
-}
-
-/* Remove hover/click affordances for non-interactive profile items */
-.profile-playlist-item:hover {
-    background: rgba(30, 30, 50, 0.6);
-    border-color: rgba(100, 200, 255, 0.12);
-}
-
-/* Ensure inner song rows don't show pointer cursor */
-.profile-playlist-item .playlist-song,
-.profile-playlist-item .playlist-header,
-.profile-playlist-item .playlist-more {
-    cursor: default;
-}
-
-.playlist-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    gap: 8px;
-}
-
-.playlist-name {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #e0f7ff;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-}
-
-.playlist-count {
-    font-size: 0.8rem;
-    color: rgba(100, 200, 255, 0.6);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.playlist-songs {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.playlist-song {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 6px 8px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 5px;
-    border-left: 2px solid rgba(100, 200, 255, 0.2);
-}
 
 .song-title {
     font-size: 0.8rem;
@@ -424,13 +329,6 @@
     padding: 4px 8px;
     text-align: center;
 }
-
-/* Compact top-song styles */
-.top-song-item { padding: 8px 10px; }
-.top-song-compact { display:flex; gap:8px; align-items:center; font-size:0.9rem; }
-.top-song-pos { font-weight:700; color: rgba(224,247,255,0.9); }
-.top-song-title { font-weight:600; color: #e0f7ff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.top-song-artist { color: rgba(100,200,255,0.6); font-weight:500; flex-shrink:0; }
 
 .empty-state {
     text-align: center;

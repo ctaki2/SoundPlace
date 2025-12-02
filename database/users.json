@@ -15,31 +15,28 @@
   "a": {
     "password": "1",
     "playlists": {
-      "af": [
+      "feqg": [
         {
-          "url": "https://oleafkuh.github.io/soundplace-tracks/MOHMOHRAP%20-%20Dollarz.mp3",
-          "title": "Dollarz",
-          "artist": "MOHMOHRAP"
+          "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+          "title": " Mini Copies",
+          "artist": "Monolog Rockstars"
         },
         {
           "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
           "title": " space​.​.​.​dude (ietsje anders)",
           "artist": "Richard Jonas"
-        },
+        }
+      ],
+      "a": [
         {
-          "url": " https://oleafkuh.github.io/soundplace-tracks/VADE%20-%20Chinatown.mp3 ",
-          "title": " Chinatown",
-          "artist": "VADE"
-        },
-        {
-          "url": " https://oleafkuh.github.io/soundplace-tracks/Ketsa%20-%20New%20Soul.mp3 ",
-          "title": " New Soul",
-          "artist": "New Soul"
+          "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+          "title": " space​.​.​.​dude (ietsje anders)",
+          "artist": "Richard Jonas"
         }
       ]
     },
     "queue": [],
-    "queueIndex": 4,
+    "queueIndex": 0,
     "manualQueue": 0,
     "history": [
       {
@@ -101,14 +98,51 @@
         "title": " New Soul",
         "artist": "New Soul",
         "timestamp": 1764661832804
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/CODESCORN%20-%20streaming%20%5Bsng%5D_mastered.mp3",
+        "title": " streaming [sng]_mastered",
+        "artist": "CODESCORN",
+        "timestamp": 1764663381072
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Rex%20Hobart%20and%20Misery%20Boys%20-%20Good%20Ain%27t%20Gone.mp3",
+        "title": " Good Aint Gone",
+        "artist": "Rex Hobart and Misery Boys",
+        "timestamp": 1764664177197
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764664695638
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+        "title": " space​.​.​.​dude (ietsje anders)",
+        "artist": "Richard Jonas",
+        "timestamp": 1764664719014
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Richard%20Jonas%20-%20space_._._._dude%20%28ietsje%20anders%29.mp3",
+        "title": " space​.​.​.​dude (ietsje anders)",
+        "artist": "Richard Jonas",
+        "timestamp": 1764665323170
+      },
+      {
+        "url": " https://oleafkuh.github.io/soundplace-tracks/Monolog%20Rockstars%20-%20Mini%20Copies.mp3",
+        "title": " Mini Copies",
+        "artist": "Monolog Rockstars",
+        "timestamp": 1764665588163
       }
     ],
     "friends": [
-      "b"
+      "b",
+      "g"
     ],
     "friendRequestsSent": [],
     "friendRequestsReceived": [],
-    "shareLoc": false,
+    "shareLoc": true,
     "intList": false,
     "volume": 0
   },
@@ -244,5 +278,20 @@
     "shareLoc": false,
     "intList": false,
     "volume": 0
+  },
+  "g": {
+    "password": "1",
+    "playlists": {},
+    "queue": [],
+    "queueIndex": -1,
+    "manualQueue": 0,
+    "history": [],
+    "friends": [
+      "a"
+    ],
+    "friendRequestsSent": [],
+    "friendRequestsReceived": [],
+    "shareLoc": true,
+    "intList": false
   }
 }

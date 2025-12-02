@@ -2,6 +2,7 @@
 
 @import 'design-system.css';
 @import 'base.css';
+@import 'components/friends.css';
 @import 'components/header.css';
 @import 'components/player.css';
 @import 'components/buttons.css';
@@ -13,7 +14,6 @@
 @import 'settings.css';
 @import 'components/search.css';
 
-/* map-controls.css - New file */
 
 #map-controls {
   position: fixed;

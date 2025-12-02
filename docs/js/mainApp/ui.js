@@ -182,8 +182,8 @@ export function populatePlaylistsUI() {
           showTemporaryNotification(`Removed from "${name}"`);
         };
 
-        row.appendChild(sbtn);
         row.appendChild(removeBtn);
+        row.appendChild(sbtn);
         content.appendChild(row);
       });
     }
