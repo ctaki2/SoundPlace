@@ -1,4 +1,4 @@
-SoundPlace 
+#SoundPlace 
 Location based music discovery platform 
 
 Overview 
